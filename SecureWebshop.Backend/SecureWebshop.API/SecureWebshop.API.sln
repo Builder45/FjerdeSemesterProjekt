@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureWebshop.API", "SecureWebshop.API\SecureWebshop.API.csproj", "{EE8AA36B-2419-460A-9113-D73135A248A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecureWebshop.API", "SecureWebshop.API\SecureWebshop.API.csproj", "{EE8AA36B-2419-460A-9113-D73135A248A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureWebshop.Domain", "SecureWebshop.Domain\SecureWebshop.Domain.csproj", "{8EEE622E-6234-426D-A355-495F254EC628}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecureWebshop.Domain", "SecureWebshop.Domain\SecureWebshop.Domain.csproj", "{8EEE622E-6234-426D-A355-495F254EC628}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureWebshop.Application", "SecureWebshop.Application\SecureWebshop.Application.csproj", "{C3B0E061-BC0C-459F-9EE3-9A34F674E6E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecureWebshop.Application", "SecureWebshop.Application\SecureWebshop.Application.csproj", "{C3B0E061-BC0C-459F-9EE3-9A34F674E6E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureWebshop.Persistence", "SecureWebshop.Persistence\SecureWebshop.Persistence.csproj", "{31DD5259-F220-4F74-BA04-CB033E7C7AB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecureWebshop.Persistence", "SecureWebshop.Persistence\SecureWebshop.Persistence.csproj", "{31DD5259-F220-4F74-BA04-CB033E7C7AB6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
