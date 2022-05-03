@@ -13,8 +13,10 @@ builder.Services.AddSwaggerGen();
 // 
 builder.Services.AddSingleton<IRavenDbContext, RavenDbContext>();
 builder.Services.AddSingleton(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+builder.Services.AddSingleton(typeof(IUserRepo), typeof(UserRepo));
 
 builder.Services.AddScoped<ICreateUser, CreateUser>();
+builder.Services.AddScoped<IGetUser, GetUser>();
 
 // Kobling mellem appsettings og persistence-laget, så der kan forbindes til RavenDB
 builder.Services.Configure<PersistenceSettings>(builder.Configuration.GetSection("RavenDB"));

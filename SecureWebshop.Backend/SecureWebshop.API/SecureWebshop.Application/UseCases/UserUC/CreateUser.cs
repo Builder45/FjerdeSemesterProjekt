@@ -1,6 +1,6 @@
 ﻿using SecureWebshop.Application.Repositories;
-using SecureWebshop.Application.Dtos;
 using SecureWebshop.Domain.Entities;
+using SecureWebshop.Application.Requests.UserRequests;
 
 namespace SecureWebshop.Application.UseCases.UserUC
 {
@@ -13,26 +13,18 @@ namespace SecureWebshop.Application.UseCases.UserUC
             _repo = repo;
         }
 
-        public void Create(UserDto userDto)
+        public void Create(CreateUserRequest request)
         {
             var user = new User
             {
-                Email = userDto.Email,
-                HashedPassword = userDto.HashedPassword,
-                Name = userDto.Name,
-                PhoneNumber = userDto.PhoneNumber
+                Email = request.Email,
+                HashedPassword = request.HashedPassword,
+                Name = request.Name,
+                PhoneNumber = request.PhoneNumber
             };
 
-            foreach (var addressDto in userDto.Addresses)
-            {
-                var address = new Address
-                {
-                    Name = addressDto.Name,
-                    Street = addressDto.Street,
-                    PostalCode = addressDto.PostalCode
-                };
-                user.Addresses.Add(address);
-            }
+            user.Addresses.Add(
+                new Address(request.AddressTitle, request.AddressStreet, request.AddressPostalCode));
 
             _repo.CreateOrUpdate(user);
         }

@@ -1,9 +1,9 @@
-﻿using SecureWebshop.Application.Dtos;
+﻿using SecureWebshop.Application.Requests.UserRequests;
 
 namespace SecureWebshop.Application.UseCases.UserUC
 {
     public interface ICreateUser
     {
-        void Create(UserDto userDto);
+        void Create(CreateUserRequest request);
     }
 }
