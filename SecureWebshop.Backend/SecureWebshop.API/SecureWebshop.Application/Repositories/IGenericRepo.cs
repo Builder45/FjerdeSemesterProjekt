@@ -2,9 +2,9 @@
 {
     public interface IGenericRepo<T>
     {
-        void CreateOrUpdate(T entity);
-        void Delete(string id);
-        public T Get(string id);
-        public IEnumerable<T> GetAll(int pageSize, int pageNumber);
+        Task CreateOrUpdate(T entity);
+        Task Delete(string id);
+        public Task<T> Get(string id);
+        public Task<IEnumerable<T>> GetAll(int pageSize, int pageNumber);
     }
 }

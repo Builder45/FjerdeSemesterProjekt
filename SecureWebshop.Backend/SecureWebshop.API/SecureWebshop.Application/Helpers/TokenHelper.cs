@@ -1,21 +1,21 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
 
-namespace SecureWebshop.API.Services
+namespace SecureWebshop.Application.Helpers
 {
-    public class TokenService : ITokenService
+    public class TokenHelper : ITokenHelper
     {
         private readonly IConfiguration _config;
 
-        public TokenService(IConfiguration config)
+        public TokenHelper(IConfiguration config)
         {
             _config = config;
         }
 
-        public async Task<string> GenerateAccessToken(string userId, string email, bool isAdmin)
+        public async Task<string> GenerateAccessToken(string userId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -29,11 +29,8 @@ namespace SecureWebshop.API.Services
             // Opsætning af ClaimsIdentity med claims:
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, userId),
-                new Claim(ClaimTypes.Email, email)
+                new Claim(ClaimTypes.NameIdentifier, userId)
             };
-            if (isAdmin)
-                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
 
             var claimsIdentity = new ClaimsIdentity(claims);
 
@@ -61,29 +58,5 @@ namespace SecureWebshop.API.Services
             var refreshToken = Convert.ToBase64String(secureRandomBytes);
             return refreshToken;
         }
-
-        //public async Task<string> GenerateAccessToken(string email, bool isAdmin)
-        //{
-        //    List<Claim> claims = new List<Claim>
-        //    {
-        //        new Claim(ClaimTypes.Email, email),
-        //    };
-
-        //    if (isAdmin)
-        //        claims.Add(new Claim(ClaimTypes.Role, "Admin"));
-
-        //    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("JWT:Key").Value));
-        //    var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-        //    var token = new JwtSecurityToken(
-        //        claims: claims,
-        //        expires: DateTime.Now.AddMinutes(2),
-        //        signingCredentials: credentials
-        //    );
-
-        //    var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-        //    return jwt;
-        //}
     }
 }

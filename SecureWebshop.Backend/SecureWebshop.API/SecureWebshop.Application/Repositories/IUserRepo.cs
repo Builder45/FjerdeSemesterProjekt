@@ -4,6 +4,7 @@ namespace SecureWebshop.Application.Repositories
 {
     public interface IUserRepo
     {
-        User GetByEmail(string email);
+        Task<User> GetByEmail(string email);
+        Task<User> GetActiveUserByEmail(string email);
     }
 }

@@ -12,10 +12,17 @@ namespace SecureWebshop.Persistence.Repositories
             _context = context;
         }
 
-        public User GetByEmail(string email)
+        public async Task<User> GetByEmail(string email)
         {
             using var session = _context.Store.OpenSession();
             var user = session.Query<User>().FirstOrDefault(user => user.Email == email);
+            return user;
+        }
+
+        public async Task<User> GetActiveUserByEmail(string email)
+        {
+            using var session = _context.Store.OpenSession();
+            var user = session.Query<User>().FirstOrDefault(user => user.Email == email && user.IsActive == true);
             return user;
         }
     }

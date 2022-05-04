@@ -18,8 +18,8 @@ namespace SecureWebshop.Application.UseCases.UserUC
             var user = new User
             {
                 Email = request.Email,
-                HashedPassword = request.HashedPassword,
-                Name = request.Name,
+                PasswordHash = request.HashedPassword,
+                FirstName = request.Name,
                 PhoneNumber = request.PhoneNumber
             };
 

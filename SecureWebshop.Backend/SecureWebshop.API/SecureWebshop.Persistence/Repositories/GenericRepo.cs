@@ -1,4 +1,5 @@
-﻿using SecureWebshop.Application.Repositories;
+﻿using Raven.Client.Documents;
+using SecureWebshop.Application.Repositories;
 using SecureWebshop.Persistence.Context;
 
 namespace SecureWebshop.Persistence.Repositories
@@ -11,40 +12,40 @@ namespace SecureWebshop.Persistence.Repositories
             _context = context;
         }
 
-        public void CreateOrUpdate(T entity)
+        public async Task CreateOrUpdate(T entity)
         {
-            using var session = _context.Store.OpenSession();
-            session.Store(entity);
-            session.SaveChanges();
+            using var session = _context.Store.OpenAsyncSession();
+            await session.StoreAsync(entity);
+            await session.SaveChangesAsync();
         }
 
-        public void Delete(string id)
+        public async Task Delete(string id)
         {
-            using var session = _context.Store.OpenSession();
-            var entity = session.Load<T>(id);
+            using var session = _context.Store.OpenAsyncSession();
+            var entity = session.LoadAsync<T>(id);
             session.Delete(entity);
-            session.SaveChanges();
+            await session.SaveChangesAsync();
         }
 
-        public T Get(string id)
+        public async Task<T> Get(string id)
         {
-            using var session = _context.Store.OpenSession();
-            var entity = session.Load<T>(id);
+            using var session = _context.Store.OpenAsyncSession();
+            var entity = await session.LoadAsync<T>(id);
             return entity;
         }
 
-        public IEnumerable<T> GetAll(int pageSize, int pageNumber)
+        public async Task<IEnumerable<T>> GetAll(int pageSize, int pageNumber)
         {
             int skip = pageSize * (pageNumber - 1);
             int take = pageSize;
 
-            using var session = _context.Store.OpenSession();
+            using var session = _context.Store.OpenAsyncSession();
 
-            var entities = session
+            var entities = await session
                 .Query<T>()
                 .Skip(skip)
                 .Take(take)
-                .ToList();
+                .ToListAsync();
 
             return entities;
         }

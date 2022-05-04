@@ -12,9 +12,9 @@ namespace SecureWebshop.Application.UseCases.UserUC
             _userRepo = userRepo;
         }
 
-        public User GetByEmail(string email)
+        public async Task<User> GetByEmail(string email)
         {
-            var user = _userRepo.GetByEmail(email);
+            var user = await _userRepo.GetByEmail(email);
             return user;
         }
     }

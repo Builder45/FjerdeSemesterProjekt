@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SecureWebshop.Domain\SecureWebshop.Domain.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="6.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.17.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\NewFolder\" />
+    <ProjectReference Include="..\SecureWebshop.Domain\SecureWebshop.Domain.csproj" />
   </ItemGroup>
 
 </Project>

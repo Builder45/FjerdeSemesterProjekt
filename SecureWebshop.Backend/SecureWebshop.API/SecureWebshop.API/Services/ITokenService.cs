@@ -2,6 +2,7 @@
 {
     public interface ITokenService
     {
-        string GenerateToken(string email, bool isAdmin);
+        Task<string> GenerateAccessToken(string userId, string email, bool isAdmin);
+        Task<string> GenerateRefreshToken();
     }
 }
