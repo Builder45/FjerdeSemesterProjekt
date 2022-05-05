@@ -15,7 +15,7 @@ namespace SecureWebshop.Application.Helpers
             _config = config;
         }
 
-        public async Task<string> GenerateAccessToken(string userId)
+        public async Task<string> GenerateAccessToken(string userId, bool userIsAdmin)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -32,6 +32,11 @@ namespace SecureWebshop.Application.Helpers
                 new Claim(ClaimTypes.NameIdentifier, userId)
             };
 
+            if (userIsAdmin)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+            }
+
             var claimsIdentity = new ClaimsIdentity(claims);
 
             // Opsætning af indholdet i vores JWT Token:
@@ -40,7 +45,7 @@ namespace SecureWebshop.Application.Helpers
                 Subject = claimsIdentity,
                 Issuer = _config.GetSection("JWT:Issuer").Value,
                 Audience = _config.GetSection("JWT:Audience").Value,
-                Expires = DateTime.Now.AddMinutes(5),
+                Expires = DateTime.Now.AddMinutes(3),
                 SigningCredentials = credentials
             };
 

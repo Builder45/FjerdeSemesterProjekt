@@ -56,14 +56,12 @@ namespace SecureWebshop.Application.Services.Auth
                 return new LogoutResponse { Success = true };
 
             // Ingen token? Logout = success
-            var refreshToken = user.RefreshTokens.FirstOrDefault();
-            if (refreshToken == null)
+            if (user.RefreshToken == null)
                 return new LogoutResponse { Success = true };
 
-            user.RefreshTokens.Remove(refreshToken);
             try
             {
-                await _genericUserRepo.CreateOrUpdate(user);
+                await _tokenService.RemoveRefreshTokenAsync(user.Id);
                 return new LogoutResponse { Success = true };
             }
             catch (Exception)

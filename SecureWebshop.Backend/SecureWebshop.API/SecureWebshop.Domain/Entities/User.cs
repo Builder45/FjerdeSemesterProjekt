@@ -12,6 +12,6 @@
         public DateTime CreationDate { get; set; }
         public bool IsActive { get; set; }
         public List<Address> Addresses { get; set; } = new List<Address>();
-        public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+        public RefreshToken? RefreshToken { get; set; }
     }
 }

@@ -18,29 +18,32 @@ namespace SecureWebshop.Application.Services.Auth
 
         public async Task<Tuple<string, string>> GenerateTokensAsync(string userId)
         {
-            var accessToken = await _tokenHelper.GenerateAccessToken(userId);
-            var refreshToken = await _tokenHelper.GenerateRefreshToken();
-
             var user = await _genericUserRepo.Get(userId);
-
             if (user == null)
                 return null;
+
+            // Midlertidig rollefordeling:
+            bool isAdmin = user.FirstName == "Admin";
+
+            var accessToken = await _tokenHelper.GenerateAccessToken(userId, isAdmin);
+            var refreshToken = await _tokenHelper.GenerateRefreshToken();
 
             var salt = HashHelper.GenerateSecureSalt();
             var refreshTokenHashed = HashHelper.HashUsingPbkdf2(refreshToken, salt);
 
-            if (user.RefreshTokens != null && user.RefreshTokens.Any())
-            {
-                await RemoveRefreshTokenAsync(user.Id);
-            }
+            //if (user.RefreshToken != null)
+            //{
+            //    await RemoveRefreshTokenAsync(user.Id);
+            //}
 
-            user.RefreshTokens?.Add(new RefreshToken
+            var newRefreshToken = new RefreshToken
             {
-                ExpiryDate = DateTime.Now.AddMinutes(10),
+                ExpiryDate = DateTime.Now.AddMinutes(5),
                 CreationDate = DateTime.Now,
                 TokenHash = refreshTokenHashed,
                 TokenSalt = Convert.ToBase64String(salt)
-            });
+            };
+            user.RefreshToken = newRefreshToken;
 
             await _genericUserRepo.CreateOrUpdate(user);
 
@@ -54,13 +57,11 @@ namespace SecureWebshop.Application.Services.Auth
             if (user == null)
                 return false;
 
-            if (user.RefreshTokens != null && user.RefreshTokens.Any())
-            {
-                // Fjern første token på listen
-                user.RefreshTokens.RemoveAt(0);
-                await _genericUserRepo.CreateOrUpdate(user);
-            }
+            if (user.RefreshToken == null)
+                return false;
 
+            user.RefreshToken = null;
+            await _genericUserRepo.CreateOrUpdate(user);
             return true;
         }
 
@@ -76,23 +77,22 @@ namespace SecureWebshop.Application.Services.Auth
                 return response;
             }
 
-            var refreshToken = user.RefreshTokens.FirstOrDefault();
-            if (refreshToken == null)
+            if (user.RefreshToken == null)
             {
                 response.Error = "Invalid session or user is already logged out";
                 response.ErrorCode = "R02";
                 return response;
             }
 
-            var requestTokenHashed = HashHelper.HashUsingPbkdf2(refreshTokenRequest.RefreshToken, Convert.FromBase64String(refreshToken.TokenSalt));
-            if (refreshToken.TokenHash != requestTokenHashed)
+            var requestTokenHash = HashHelper.HashUsingPbkdf2(refreshTokenRequest.RefreshToken, Convert.FromBase64String(user.RefreshToken.TokenSalt));
+            if (user.RefreshToken.TokenHash != requestTokenHash)
             {
                 response.Error = "Invalid refresh token!";
                 response.ErrorCode = "R03";
                 return response;
             }
 
-            if (refreshToken.ExpiryDate < DateTime.Now)
+            if (user.RefreshToken.ExpiryDate < DateTime.Now)
             {
                 response.Error = "Refresh token has expired!";
                 response.ErrorCode = "R04";

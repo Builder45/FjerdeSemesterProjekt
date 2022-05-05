@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SecureWebshop.Application.Helpers;
 using SecureWebshop.Application.Services.Auth;
+using Microsoft.AspNetCore.Cors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "", Version = "v1" });
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "SecureWebshop", Version = "v1" });
 
     // Tilføjer mulighed for at bruge Bearer authentication sammen med Swagger
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -55,6 +56,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateIssuerSigningKey = true,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero,
             ValidIssuer = builder.Configuration.GetSection("JWT:Issuer").Value,
             ValidAudience = builder.Configuration.GetSection("JWT:Audience").Value,
             IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(builder.Configuration.GetSection("JWT:Key").Value))
@@ -111,7 +114,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseCors(options =>
+{
+    options.WithOrigins("http://localhost:3000");
+    options.AllowAnyHeader();
+    options.AllowAnyMethod();
+});
+
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
