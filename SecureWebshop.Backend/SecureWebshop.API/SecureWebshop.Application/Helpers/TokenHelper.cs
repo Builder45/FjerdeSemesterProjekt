@@ -45,7 +45,7 @@ namespace SecureWebshop.Application.Helpers
                 Subject = claimsIdentity,
                 Issuer = _config.GetSection("JWT:Issuer").Value,
                 Audience = _config.GetSection("JWT:Audience").Value,
-                Expires = DateTime.Now.AddMinutes(3),
+                Expires = DateTime.Now.AddMinutes(1),
                 SigningCredentials = credentials
             };
 

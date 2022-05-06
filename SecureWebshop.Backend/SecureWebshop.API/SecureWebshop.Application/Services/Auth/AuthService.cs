@@ -43,8 +43,10 @@ namespace SecureWebshop.Application.Services.Auth
             var tokens = await Task.Run(() => _tokenService.GenerateTokensAsync(user.Id));
 
             response.Success = true;
+            response.UserId = user.Id;
             response.AccessToken = tokens.Item1;
             response.RefreshToken = tokens.Item2;
+            response.AccessTokenExpiration = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() + 1000 * 60 * 1;
             return response;
         }
 

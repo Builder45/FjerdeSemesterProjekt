@@ -64,8 +64,16 @@ namespace SecureWebshop.API.Controllers.Auth
                 return UnprocessableEntity(validateRefreshTokenResponse);
             }
 
-            var tokenResponse = await _tokenService.GenerateTokensAsync(validateRefreshTokenResponse.UserId);
-            return Ok(new { AccessToken = tokenResponse.Item1, RefreshToken = tokenResponse.Item2 });
+            var newTokens = await _tokenService.GenerateTokensAsync(validateRefreshTokenResponse.UserId);
+
+            var tokenResponse = new TokenResponse
+            {
+                AccessToken = newTokens.Item1,
+                RefreshToken = newTokens.Item2,
+                AccessTokenExpiration = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() + 1000 * 60 * 1
+            };
+
+            return Ok(tokenResponse);
         }
 
         [HttpPost("Signup")]

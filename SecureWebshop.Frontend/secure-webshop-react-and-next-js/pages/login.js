@@ -1,24 +1,21 @@
-import axios from "axios";
-import { signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import LoginForm from "../components/auth/LoginForm";
 
 function Login() {
-  const loginHandler = async () => {
-    const result = await signIn('credentials', {
-      redirect: false,
-      email: 'test@mail.com', 
-      password: 'Password123' 
-    });
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
-    console.log(result);
-  };
-  const logoutHandler = () => {
-    signOut();
-  };
+  if (session) {
+    router.push('/');
+  }
+
+  if (status === 'loading') {
+    return <p>Loading...</p>;
+  }
+  
   return (
-    <div>
-      <button onClick={loginHandler}>Login</button>
-      <button onClick={logoutHandler}>Logout</button>
-    </div>
+    <LoginForm/>
   )
 }
 

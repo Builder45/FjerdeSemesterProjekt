@@ -12,13 +12,14 @@ async function refreshAccessToken(tokenObject) {
     return {
       ...tokenObject,
       accessToken: tokenResponse.data.accessToken,
+      expires: tokenResponse.data.accessTokenExpiration,
       refreshToken: tokenResponse.data.refreshToken
     }
   }
   catch (error) {
     return {
       ...tokenObject,
-      error: "RefreshAccessTokenError"
+      error: "RefreshAccessTokenError",
     }
   }
 }
@@ -32,15 +33,15 @@ const providers = [
     },
     async authorize(credentials) {
       try {
-        const loginResponse = await axios.post("http://localhost:5117/api/" + 'Auth/Login', 
+        const user = await axios.post("http://localhost:5117/api/" + 'Auth/Login', 
           {
             email: credentials.email,
             password: credentials.password
           }
         );
 
-        if (loginResponse.data.accessToken) {
-          return loginResponse.data;
+        if (user.data.accessToken) {
+          return user;
         }
 
         return null;
@@ -52,21 +53,37 @@ const providers = [
   })
 ];
 
+// jwt callback:
+// Kaldes hver gang der laves et login eller der tilgås adgang til useSession/getSession:
+// 'user' indeholder data som blev sendt videre i CredentialsProvider ved login
+// 'token' indeholder token data per session
+// session callback:
+// Kaldes hver gang der bruges useSession/getSession.
+// Her sendes oplysninger der er relevante for klienten!
+// (Ved brug af session bliver jwt callback kaldt før session callback)
 const callbacks = {
   jwt: async ({ token, user }) => {
     if (user) {
-      // Kode køres ved login:
-      token.accessToken = user.accessToken;
-      token.refreshToken = user.refreshToken;
+      // Kode køres kun ved login:
+      token.userId = user.data.userId;
+      token.accessToken = user.data.accessToken;
+      token.expires = user.data.accessTokenExpiration;
+      token.refreshToken = user.data.refreshToken;
     }
 
-    token = refreshAccessToken(token);
+    // Skaf ny token, hvis den gamle er udløbet:
+    if (Date.now() >= token.expires) {
+      token = refreshAccessToken(token);
+    }
+
     return Promise.resolve(token);
   },
   session: async ({ session, token }) => {
+
+    session.userId = token.userId;
     session.accessToken = token.accessToken;
     session.error = token.error;
-
+    
     return Promise.resolve(session);
   }
 };
@@ -74,8 +91,7 @@ const callbacks = {
 export const options = {
   providers,
   callbacks,
-  pages: {},
-  secret: 'PAFPkfapwsk3pkkp345pKP5KPOskap5'
+  pages: {}
 };
 
 const Auth = (req, res) => NextAuth(req, res, options);
