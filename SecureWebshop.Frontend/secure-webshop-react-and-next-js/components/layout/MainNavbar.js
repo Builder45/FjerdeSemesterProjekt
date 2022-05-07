@@ -1,13 +1,15 @@
-import { signOut, useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import useAuth from '../../hooks/useAuth';
 import Logo from './Logo';
 import classes from './MainNavbar.module.css';
 
 function MainNavbar() {
-  const { data: session } = useSession();
-  const isAuthenticated = session;
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
   const logoutHandler = () => {
-    signOut();
+    signOut({ callbackUrl: '/login' });
   };
 
   let authElement = <li><Link href='/login'>Login</Link></li>;

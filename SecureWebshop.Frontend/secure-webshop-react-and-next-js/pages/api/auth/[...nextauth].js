@@ -21,9 +21,10 @@ async function refreshAccessToken(tokenObject) {
     });
 
     const decodedToken = getDecodedToken(tokenResponse.data.accessToken);
+    console.log("met: " + tokenResponse.data.refreshToken);
 
     return {
-      ...tokenObject,
+      userId: tokenObject.userId,
       accessToken: tokenResponse.data.accessToken,
       accessTokenExpiration: tokenResponse.data.accessTokenExpiration,
       refreshToken: tokenResponse.data.refreshToken,
@@ -31,9 +32,10 @@ async function refreshAccessToken(tokenObject) {
     }
   }
   catch (error) {
+    console.log("error: " + error);
     return {
       ...tokenObject,
-      error: error,
+      error: "ErrorRefreshingAccessToken",
     }
   }
 }
@@ -62,8 +64,8 @@ const providers = [
 
         return null;
       }
-      catch (e) {
-        throw new Error(e);
+      catch (error) {
+        throw new Error(error);
       }
     }
   })
@@ -88,29 +90,26 @@ const callbacks = {
       token.role = user.data.decodedToken?.role;
     }
 
-    // Skaf ny token, hvis den gamle er udløbet:
-    if (Date.now() >= token.accessTokenExpiration) {
-      token = refreshAccessToken(token);
+    console.log("jwt: " + token.refreshToken);
+
+    const currentTime = Date.now();
+    if (currentTime < token.accessTokenExpiration) {
+      return token;
     }
 
-    return Promise.resolve(token);
+    // Skaf ny token, hvis den gamle er udløbet:
+    console.log("refreshing");
+    const newToken = await refreshAccessToken(token);
+    console.log("new: " + newToken.refreshToken);
+    return newToken;
   },
   session: async ({ session, token }) => {
 
-    if (!token.error) {
-      session.user.accessToken = token.accessToken;
-      session.user.role = token.role ? token.role : 'User';
-    }
-    else {
-      session.error = token.error;
-    }
-
-    // Debugging
-    session.accExpiry = token.accessTokenExpiration;
-    session.dateNow = Date.now();
+    session.user.accessToken = token.accessToken;
+    session.user.role = token.role ? token.role : 'User';
     session.error = token.error;
 
-    return Promise.resolve(session);
+    return session;
   }
 };
 
