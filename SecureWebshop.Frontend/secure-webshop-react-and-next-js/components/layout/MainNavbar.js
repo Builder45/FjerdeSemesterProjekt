@@ -1,11 +1,11 @@
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
-import useAuth from '../../hooks/useAuth';
 import Logo from './Logo';
 import classes from './MainNavbar.module.css';
 
 function MainNavbar() {
-  const isAuthenticated = useAuth(false);
+  const { data: session } = useSession();
+  const isAuthenticated = session;
   const logoutHandler = () => {
     signOut();
   };

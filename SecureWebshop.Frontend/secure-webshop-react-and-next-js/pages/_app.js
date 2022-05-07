@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { Children } from 'react';
 
 import Layout from '../components/layout/Layout';
+import Loading from '../components/ui/Loading';
 import '../styles/globals.css'
 
 export default function MyApp({ Component, pageProps }) {
@@ -31,7 +32,7 @@ function Auth({ authOptions, children }) {
     }
   }, [status, sessionFound]);
 
-  if (sessionFound && authOptions.role) {
+  if (sessionFound) {
     if (session.user.role === authOptions.role) {
       return children;
     }
@@ -40,10 +41,6 @@ function Auth({ authOptions, children }) {
     }
   }
 
-  if (sessionFound) {
-    return children;
-  }
-
   // Session bliver hentet ned / Ingen bruger fundet endnu
-  return authOptions.loading ? authOptions.loading : <div>Loading...</div>
+  return <Loading />
 }

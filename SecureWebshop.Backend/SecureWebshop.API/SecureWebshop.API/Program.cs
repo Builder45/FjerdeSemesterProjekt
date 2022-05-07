@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using SecureWebshop.Application.Helpers;
 using SecureWebshop.Application.Services.Auth;
 using Microsoft.AspNetCore.Cors;
+using SecureWebshop.Application.Services.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -99,6 +100,7 @@ builder.Services.AddSingleton(typeof(ITokenHelper), typeof(TokenHelper));
 
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddScoped<ICreateUser, CreateUser>();
 builder.Services.AddScoped<IGetUser, GetUser>();

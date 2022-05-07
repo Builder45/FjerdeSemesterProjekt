@@ -1,31 +1,30 @@
-import { getToken } from "next-auth/jwt";
-import { getSession } from "next-auth/react";
+import axios from "axios";
+import { createRequiredAuth } from "../../utils/ssr";
 
-function UserProfilePage({ session, token }) {
-  console.log(token);
-  return <div>{session.userId}</div>;
+/* 
+  Server-side kode
+*/
+export async function getServerSideProps(context) {
+
+  const ssr = await createRequiredAuth({ allowedRoles: ["User", "Admin"] })({ req: context.req });
+  if (!ssr.props) return ssr;
+
+  const response = await axios.get('http://localhost:5117/api/' + 'Users/GetProfile', {
+    headers: {
+      'Authorization': `Bearer ${ssr.props.user.accessToken}`
+    }
+  });
+  ssr.props.initialData = response.data;
+
+  return ssr;
+
 }
 
-export async function getServerSideProps(context) {
-  const session = await getSession({req: context.req});
-  const token = await getToken( {req: context.req} );
-
-  // Hvis brugeren ikke er authenticated
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false
-      }
-    }
-  }
-
-  return {
-    props: {
-      session,
-      token
-    }
-  }
+/* 
+  Client-side kode
+*/
+function UserProfilePage({ initialData }) {
+  return <div><p>Welcome {initialData.firstName + " " + initialData.lastName}!</p></div>;
 }
 
 export default UserProfilePage;

@@ -1,6 +1,17 @@
 import axios from 'axios';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import jwt_decode from 'jwt-decode';
+
+function getDecodedToken(accessToken) {
+  try {
+    const decodedToken = jwt_decode(accessToken);
+    return decodedToken;
+  }
+  catch (error) {
+    return null;
+  }
+}
 
 async function refreshAccessToken(tokenObject) {
   try {
@@ -9,17 +20,20 @@ async function refreshAccessToken(tokenObject) {
       refreshToken: tokenObject.refreshToken
     });
 
+    const decodedToken = getDecodedToken(tokenResponse.data.accessToken);
+
     return {
       ...tokenObject,
       accessToken: tokenResponse.data.accessToken,
-      expires: tokenResponse.data.accessTokenExpiration,
-      refreshToken: tokenResponse.data.refreshToken
+      accessTokenExpiration: tokenResponse.data.accessTokenExpiration,
+      refreshToken: tokenResponse.data.refreshToken,
+      role: decodedToken?.role
     }
   }
   catch (error) {
     return {
       ...tokenObject,
-      error: "RefreshAccessTokenError",
+      error: error,
     }
   }
 }
@@ -41,6 +55,8 @@ const providers = [
         );
 
         if (user.data.accessToken) {
+          const decodedToken = getDecodedToken(user.data.accessToken);
+          user.data.decodedToken = decodedToken;
           return user;
         }
 
@@ -67,12 +83,13 @@ const callbacks = {
       // Kode køres kun ved login:
       token.userId = user.data.userId;
       token.accessToken = user.data.accessToken;
-      token.expires = user.data.accessTokenExpiration;
+      token.accessTokenExpiration = user.data.accessTokenExpiration;
       token.refreshToken = user.data.refreshToken;
+      token.role = user.data.decodedToken?.role;
     }
 
     // Skaf ny token, hvis den gamle er udløbet:
-    if (Date.now() >= token.expires) {
+    if (Date.now() >= token.accessTokenExpiration) {
       token = refreshAccessToken(token);
     }
 
@@ -80,10 +97,19 @@ const callbacks = {
   },
   session: async ({ session, token }) => {
 
-    session.userId = token.userId;
-    session.accessToken = token.accessToken;
+    if (!token.error) {
+      session.user.accessToken = token.accessToken;
+      session.user.role = token.role ? token.role : 'User';
+    }
+    else {
+      session.error = token.error;
+    }
+
+    // Debugging
+    session.accExpiry = token.accessTokenExpiration;
+    session.dateNow = Date.now();
     session.error = token.error;
-    
+
     return Promise.resolve(session);
   }
 };
