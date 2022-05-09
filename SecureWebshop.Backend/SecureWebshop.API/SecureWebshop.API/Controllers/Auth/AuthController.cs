@@ -69,8 +69,7 @@ namespace SecureWebshop.API.Controllers.Auth
             var tokenResponse = new TokenResponse
             {
                 AccessToken = newTokens.Item1,
-                RefreshToken = newTokens.Item2,
-                AccessTokenExpiration = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() + 1000 * 60 * 1
+                RefreshToken = newTokens.Item2
             };
 
             return Ok(tokenResponse);

@@ -1,0 +1,30 @@
+.control {
+  margin-bottom: 1rem;
+}
+
+.control label {
+  display: block;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.control input {
+  border-radius: 4px;
+  border: 1px solid white;
+  width: 100%;
+  padding: 0.25rem;
+}
+
+.error p {
+  margin-top: 0.3rem;
+}
+
+.error label, .error p {
+  color: var(--color-error) !important;
+}
+
+.error input {
+  border: 1px solid var(--color-error) !important;
+  background-color: var(--color-error-bg) !important;
+}

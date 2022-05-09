@@ -21,13 +21,12 @@ async function refreshAccessToken(tokenObject) {
     });
 
     const decodedToken = getDecodedToken(tokenResponse.data.accessToken);
-    console.log("met: " + tokenResponse.data.refreshToken);
 
     return {
       userId: tokenObject.userId,
       accessToken: tokenResponse.data.accessToken,
-      accessTokenExpiration: tokenResponse.data.accessTokenExpiration,
       refreshToken: tokenResponse.data.refreshToken,
+      accessTokenExpires: decodedToken?.exp ?? Date.now(),
       role: decodedToken?.role
     }
   }
@@ -85,23 +84,19 @@ const callbacks = {
       // Kode køres kun ved login:
       token.userId = user.data.userId;
       token.accessToken = user.data.accessToken;
-      token.accessTokenExpiration = user.data.accessTokenExpiration;
       token.refreshToken = user.data.refreshToken;
+      token.accessTokenExpires = user.data.decodedToken?.exp ?? Date.now();
       token.role = user.data.decodedToken?.role;
     }
 
-    console.log("jwt: " + token.refreshToken);
-
     const currentTime = Date.now();
-    if (currentTime < token.accessTokenExpiration) {
+    if (currentTime < (token.accessTokenExpires * 1000)) {
       return token;
     }
 
     // Skaf ny token, hvis den gamle er udløbet:
     console.log("refreshing");
-    const newToken = await refreshAccessToken(token);
-    console.log("new: " + newToken.refreshToken);
-    return newToken;
+    return await refreshAccessToken(token);
   },
   session: async ({ session, token }) => {
 
@@ -113,9 +108,25 @@ const callbacks = {
   }
 };
 
+const events = {
+  // Send logout request til backend, når NextAuth logger brugeren af:
+  signOut: async ({ token }) => {
+    try {
+      await axios.post('http://localhost:5117/api/' + 'Auth/Logout', {}, {
+        headers: {
+          'Authorization': `Bearer ${token.accessToken}`
+        }
+      });
+    }
+    catch (error) {
+    }
+  }
+}
+
 export const options = {
   providers,
   callbacks,
+  events,
   pages: {}
 };
 

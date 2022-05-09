@@ -46,7 +46,6 @@ namespace SecureWebshop.Application.Services.Auth
             response.UserId = user.Id;
             response.AccessToken = tokens.Item1;
             response.RefreshToken = tokens.Item2;
-            response.AccessTokenExpiration = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() + 1000 * 60 * 1;
             return response;
         }
 
