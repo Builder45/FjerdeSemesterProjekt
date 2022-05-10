@@ -15,6 +15,12 @@ namespace SecureWebshop.Application.Services.Users
             _userRepo = userRepo;
         }
 
+        public async Task<bool> EmailExists(string email)
+        {
+            var user = await _userRepo.GetByEmail(email);
+            return user != null;
+        }
+
         public async Task<UserProfileResponse> GetUserProfile(string userId)
         {
 

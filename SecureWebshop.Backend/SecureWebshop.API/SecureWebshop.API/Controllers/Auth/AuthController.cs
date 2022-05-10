@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SecureWebshop.Application.Requests.Auth;
 using SecureWebshop.Application.Responses.Auth;
 using SecureWebshop.Application.Services.Auth;
+using SecureWebshop.Application.Services.Users;
 
 namespace SecureWebshop.API.Controllers.Auth
 {
@@ -12,11 +13,13 @@ namespace SecureWebshop.API.Controllers.Auth
     {
         private readonly IAuthService _authService;
         private readonly ITokenService _tokenService;
+        private readonly IUserService _userService;
 
-        public AuthController(IAuthService authService, ITokenService tokenService)
+        public AuthController(IAuthService authService, ITokenService tokenService, IUserService userService)
         {
             _authService = authService;
             _tokenService = tokenService;
+            _userService = userService;
         }
 
         [HttpPost("Login")]
@@ -84,6 +87,14 @@ namespace SecureWebshop.API.Controllers.Auth
                 return UnprocessableEntity(signupResponse);
 
             return Ok(signupResponse.Email);
+        }
+
+        [HttpGet("EmailExists/{email}")]
+        public async Task<IActionResult> CheckEmail([FromRoute] string email)
+        {
+            bool emailExists = await _userService.EmailExists(email);
+
+            return Ok(new { emailExists });
         }
 
         [Authorize]

@@ -1,0 +1,13 @@
+.link {
+  margin-top: 0.5rem;
+  color: var(--color-text);
+  text-decoration: underline;
+}
+
+.link:visited {
+  color: var(--color-text);
+}
+
+.link:hover {
+  color: var(--color-text-hover);
+}

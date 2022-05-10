@@ -44,8 +44,6 @@ function UserSignupPage() {
       }
     });
   }
-
-  console.log(signupData);
   
   switch (signupStep) {
     case 1:

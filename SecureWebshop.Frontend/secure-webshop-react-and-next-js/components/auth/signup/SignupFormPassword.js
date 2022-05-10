@@ -1,4 +1,5 @@
 import Input from '../../ui/forms/Input';
+import Button from '../../ui/Button';
 import SignupForm from './SignupForm';
 import classes from './SignupForm.module.css';
 
@@ -17,8 +18,8 @@ export default function SignupFormInformation({ onClickBack }) {
         <Input id="repeatPassword" type="password" label="Gentag password"/>
       </div>
       <div className={classes.actions}>
-        <button>Opret ny bruger</button>
-        <button onClick={previousSignupHandler}>Gå tilbage</button>
+        <Button>Opret ny bruger</Button>
+        <Button onClick={previousSignupHandler}>Gå tilbage</Button>
       </div>
     </SignupForm>
   );

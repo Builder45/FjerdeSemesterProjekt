@@ -1,10 +1,11 @@
 import useForm from '../../../hooks/useForm';
 import { validatePhoneNumber, validateText } from '../../../utils/input-validation';
 import Input from '../../ui/forms/Input';
+import Button from '../../ui/Button';
 import SignupForm from './SignupForm';
 import classes from './SignupForm.module.css';
 
-export default function SignupFormInformation({ onClickContinue, onClickBack, signupData }) {
+export default function SignupFormInformation({ onClickContinue, onClickBack, onDataChange, signupData }) {
 
   const initialFormState = { 
     firstName: signupData.firstName ? signupData.firstName : "",
@@ -49,8 +50,8 @@ export default function SignupFormInformation({ onClickContinue, onClickBack, si
         <Input id="phoneNumber" type="tel" label="Telefon" value={input.phoneNumber} onChange={changeHandler} onBlur={blurHandler} error={phoneNumberError}/>
       </div>
       <div className={classes.actions}>
-        <button disabled={!isValid} onClick={continueSignupHandler}>Fortsæt</button>
-        <button onClick={previousSignupHandler}>Gå tilbage</button>
+        <Button disabled={!isValid} onClick={continueSignupHandler}>Fortsæt</Button>
+        <Button onClick={previousSignupHandler}>Gå tilbage</Button>
       </div>
     </SignupForm>
   );
