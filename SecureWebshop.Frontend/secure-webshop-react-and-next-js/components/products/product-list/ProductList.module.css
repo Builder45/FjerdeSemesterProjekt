@@ -1,0 +1,11 @@
+.outerContainer {
+  width: 84%;
+  margin: 3rem auto;
+  background-color: var(--color-primary);
+  color: var(--color-text);
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) 
+}

@@ -1,5 +1,4 @@
 using SecureWebshop.Application.Repositories;
-using SecureWebshop.Application.UseCases.UserUC;
 using SecureWebshop.Persistence.Context;
 using SecureWebshop.Persistence.Repositories;
 using SecureWebshop.Persistence.Settings;
@@ -10,6 +9,7 @@ using SecureWebshop.Application.Helpers;
 using SecureWebshop.Application.Services.Auth;
 using Microsoft.AspNetCore.Cors;
 using SecureWebshop.Application.Services.Users;
+using SecureWebshop.Application.Services.Products;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,31 +67,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-//// Opsætning af authentication metoden:
-//var jwtKey = builder.Configuration.GetSection("JWT:Key").Value;
-//var tokenValParams = new TokenValidationParameters
-//{
-//    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
-//    ValidateLifetime = true,
-//    ValidateAudience = false,
-//    ValidateIssuer = false,
-//    ClockSkew = TimeSpan.Zero
-//};
-//builder.Services.AddSingleton(tokenValParams);
-
-//// Authentication metoden tages i brug:
-//builder.Services.AddAuthentication(authOptions =>
-//{
-//    authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//})
-//    .AddJwtBearer(jwtOptions =>
-//    {
-//        jwtOptions.TokenValidationParameters = tokenValParams;
-//    }
-//);
-
-// 
 builder.Services.AddSingleton<IRavenDbContext, RavenDbContext>();
 builder.Services.AddSingleton(typeof(IGenericRepo<>), typeof(GenericRepo<>));
 builder.Services.AddSingleton(typeof(IUserRepo), typeof(UserRepo));
@@ -101,9 +76,7 @@ builder.Services.AddSingleton(typeof(ITokenHelper), typeof(TokenHelper));
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserService, UserService>();
-
-builder.Services.AddScoped<ICreateUser, CreateUser>();
-builder.Services.AddScoped<IGetUser, GetUser>();
+builder.Services.AddTransient<IProductService, ProductService>();
 
 // Kobling mellem appsettings og persistence-laget, så der kan forbindes til RavenDB
 builder.Services.Configure<PersistenceSettings>(builder.Configuration.GetSection("RavenDB"));

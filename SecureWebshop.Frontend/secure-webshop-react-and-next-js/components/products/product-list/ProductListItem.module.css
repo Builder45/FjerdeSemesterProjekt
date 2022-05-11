@@ -1,0 +1,48 @@
+.product {
+  cursor: default;
+  width: calc(100% - 4rem);
+  height: 25rem;
+  margin: 2rem;
+  background-color: var(--color-secondary);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 5px;
+}
+
+.productHeader {
+  width: 100%;
+  height: 5rem;
+}
+
+.productHeader h3 {
+  margin: 0.5rem 0.5rem;
+  font-size: var(--size-5);
+}
+
+.productHeader a {
+  cursor: pointer;
+  margin: 0 0.5rem;
+  text-decoration: underline;
+}
+
+.productThumbnail {
+  cursor: pointer;
+  width: 100%;
+  height: 15rem;
+  
+}
+
+.productThumbnail img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.productFooter {
+  width: 100%;
+  height: 5rem;
+}
+
+.productFooter p {
+  margin: 0.5rem 0.5rem;
+  font-size: var(--size-5);
+}

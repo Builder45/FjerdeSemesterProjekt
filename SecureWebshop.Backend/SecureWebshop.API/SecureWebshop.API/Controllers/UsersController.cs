@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SecureWebshop.Application.Responses.Users;
 using SecureWebshop.Application.Services.Users;
 
-namespace SecureWebshop.API.Controllers.Auth
+namespace SecureWebshop.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

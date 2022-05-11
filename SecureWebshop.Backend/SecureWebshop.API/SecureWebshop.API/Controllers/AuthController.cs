@@ -1,90 +1,116 @@
-﻿using BCrypt.Net;
-using BC = BCrypt.Net.BCrypt;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SecureWebshop.API.Dtos;
-using SecureWebshop.API.Lib;
-using SecureWebshop.Application.Requests.UserRequests;
-using SecureWebshop.Application.UseCases.UserUC;
-using SecureWebshop.API.Services;
+using SecureWebshop.Application.Requests.Auth;
+using SecureWebshop.Application.Responses.Auth;
+using SecureWebshop.Application.Services.Auth;
+using SecureWebshop.Application.Services.Users;
 
 namespace SecureWebshop.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : BaseApiController
     {
-        //private readonly ITokenService _tokenService;
-        //private readonly ICreateUser _createUser;
-        //private readonly IGetUser _getUser;
+        private readonly IAuthService _authService;
+        private readonly ITokenService _tokenService;
+        private readonly IUserService _userService;
 
-        //public AuthController(ITokenService tokenService, ICreateUser createUser, IGetUser getUser)
-        //{
-        //    _tokenService = tokenService;
-        //    _createUser = createUser;
-        //    _getUser = getUser;
-        //}
+        public AuthController(IAuthService authService, ITokenService tokenService, IUserService userService)
+        {
+            _authService = authService;
+            _tokenService = tokenService;
+            _userService = userService;
+        }
 
-        //[HttpPost("Signup")]
-        //[ProducesResponseType(StatusCodes.Status201Created)]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //public IActionResult Create(UserSignupDto userDto)
-        //{
-        //    if (!Validation.EmailIsValid(userDto.Email))
-        //        return BadRequest("INVALID_EMAIL");
+        [AllowAnonymous]
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginRequest loginRequest)
+        {
+            if (loginRequest == null)
+            {
+                return BadRequest(new TokenResponse
+                {
+                    Error = "Missing login details",
+                    ErrorCode = "L01"
+                });
+            }
 
-        //    if (_getUser.GetByEmail(userDto.Email) != null)
-        //        return BadRequest("EMAIL_ALREADY_IN_USE");
+            var loginResponse = await _authService.LoginAsync(loginRequest);
 
-        //    if (!Validation.PasswordIsValid(userDto.Password))
-        //        return BadRequest("INVALID_PASSWORD");
+            if (!loginResponse.Success)
+            {
+                return Unauthorized(new
+                {
+                    loginResponse.Error,
+                    loginResponse.ErrorCode
+                });
+            }
 
-        //    // Bcrypt enhanced password hashing:
-        //    // 1. Prehashing med SHA384
-        //    // 2. BCrypt hashing med salt generet med work factor 12:
-        //    string hashedPassword = BC.EnhancedHashPassword(userDto.Password, 12, hashType: HashType.SHA384);
+            return Ok(loginResponse);
+        }
 
-        //    try
-        //    {
-        //        _createUser.Create(new CreateUserRequest
-        //        {
-        //            Name = userDto.Name,
-        //            Email = userDto.Email,
-        //            HashedPassword = hashedPassword,
-        //            PhoneNumber = userDto.PhoneNumber,
-        //            AddressTitle = userDto.Address.Title,
-        //            AddressStreet = userDto.Address.Street,
-        //            AddressPostalCode = userDto.Address.PostalCode
-        //        });
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return StatusCode(500);
-        //    }
+        [AllowAnonymous]
+        [HttpPost("RefreshToken")]
+        public async Task<IActionResult> RefreshToken(RefreshTokenRequest refreshTokenRequest)
+        {
+            if (refreshTokenRequest == null)
+            {
+                return BadRequest(new TokenResponse
+                {
+                    Error = "Missing refresh token details",
+                    ErrorCode = "R01"
+                });
+            }
 
-        //    return Ok("User was created succesfully!");
-        //}
+            var validateRefreshTokenResponse = await _tokenService.ValidateRefreshTokenAsync(refreshTokenRequest);
 
-        //[HttpPost("Login")]
-        //public IActionResult Login(LoginDto loginDto)
-        //{
-        //    if (!Validation.EmailIsValid(loginDto.Email))
-        //        return BadRequest("INVALID_EMAIL");
+            if (!validateRefreshTokenResponse.Success)
+            {
+                return UnprocessableEntity(validateRefreshTokenResponse);
+            }
 
-        //    var user = _getUser.GetByEmail(loginDto.Email);
-        //    if (user == null)
-        //        return BadRequest("EMAIL_NOT_FOUND");
+            var newTokens = await _tokenService.GenerateTokensAsync(validateRefreshTokenResponse.UserId);
 
-        //    bool passwordIsValid = BC.EnhancedVerify(loginDto.Password, user.HashedPassword, hashType: HashType.SHA384);
-        //    if (!passwordIsValid)
-        //    {
-        //        return BadRequest("PASSWORD_MISMATCH");
-        //    }
+            var tokenResponse = new TokenResponse
+            {
+                AccessToken = newTokens.Item1,
+                RefreshToken = newTokens.Item2
+            };
 
-        //    string token = _tokenService.GenerateToken(loginDto.Email, true);
+            return Ok(tokenResponse);
+        }
 
-        //    return Ok(token);
-        //}
+        [AllowAnonymous]
+        [HttpPost("Signup")]
+        public async Task<IActionResult> Signup(SignupRequest signupRequest)
+        {
+            var signupResponse = await _authService.SignupAsync(signupRequest);
+
+            if (!signupResponse.Success)
+                return UnprocessableEntity(signupResponse);
+
+            return Ok(signupResponse.Email);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("EmailExists/{email}")]
+        public async Task<IActionResult> CheckEmail([FromRoute] string email)
+        {
+            bool emailExists = await _userService.EmailExists(email);
+
+            return Ok(new { emailExists });
+        }
+
+        [Authorize]
+        [HttpPost("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var logoutResponse = await _authService.LogoutAsync(UserId);
+
+            if (!logoutResponse.Success)
+                return UnprocessableEntity(logoutResponse);
+
+            return Ok();
+        }
     }
 }

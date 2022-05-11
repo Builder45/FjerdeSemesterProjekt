@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace SecureWebshop.API.Controllers
 {
+    [Authorize(Roles = "SuperAdmin")]
     public class BaseApiController : ControllerBase
     {
         protected string? UserId => FindClaim(ClaimTypes.NameIdentifier);
