@@ -16,7 +16,7 @@ namespace SecureWebshop.API.Controllers
             _userService = userService;
         }
 
-        [Authorize]
+        [Authorize(Roles = "User")]
         [HttpGet("GetProfile")]
         public async Task<IActionResult> GetProfile()
         {

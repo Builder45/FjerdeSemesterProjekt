@@ -36,6 +36,10 @@ namespace SecureWebshop.Application.Helpers
             {
                 claims.Add(new Claim(ClaimTypes.Role, "Admin"));
             }
+            else
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "User"));
+            }
 
             var claimsIdentity = new ClaimsIdentity(claims);
 

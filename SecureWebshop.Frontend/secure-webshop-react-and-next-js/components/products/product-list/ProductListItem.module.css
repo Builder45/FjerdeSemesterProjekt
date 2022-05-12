@@ -1,48 +1,45 @@
 .product {
-  cursor: default;
+  cursor: pointer;
   width: calc(100% - 4rem);
-  height: 25rem;
+  height: auto;
   margin: 2rem;
   background-color: var(--color-secondary);
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: var(--shadow);
   border-radius: 5px;
 }
 
-.productHeader {
-  width: 100%;
-  height: 5rem;
+.product:hover {
+  box-shadow: var(--shadow-enhanced);
 }
 
-.productHeader h3 {
-  margin: 0.5rem 0.5rem;
-  font-size: var(--size-5);
-}
-
-.productHeader a {
-  cursor: pointer;
-  margin: 0 0.5rem;
-  text-decoration: underline;
-}
-
-.productThumbnail {
-  cursor: pointer;
+.thumbnail {
   width: 100%;
   height: 15rem;
-  
 }
 
-.productThumbnail img {
+.thumbnail img {
   height: 100%;
   width: 100%;
   object-fit: cover;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  opacity: 0.9;
 }
 
-.productFooter {
+.info {
   width: 100%;
-  height: 5rem;
+  min-height: 7rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.productFooter p {
-  margin: 0.5rem 0.5rem;
+.infoName, .infoPrice {
   font-size: var(--size-5);
+  margin: 0.3rem 0.3rem;
+}
+
+.infoRating {
+  margin: 0.3rem auto;
 }

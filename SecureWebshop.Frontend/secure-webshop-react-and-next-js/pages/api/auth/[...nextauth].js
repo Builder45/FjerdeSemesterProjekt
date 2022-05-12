@@ -101,7 +101,7 @@ const callbacks = {
   session: async ({ session, token }) => {
 
     session.user.accessToken = token.accessToken;
-    session.user.role = token.role ? token.role : 'User';
+    session.user.role = token.role;
     session.error = token.error;
 
     return session;

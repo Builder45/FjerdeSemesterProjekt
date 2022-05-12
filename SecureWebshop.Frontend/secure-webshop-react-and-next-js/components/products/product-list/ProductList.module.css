@@ -1,11 +1,21 @@
 .outerContainer {
-  width: 84%;
+  width: 80%;
   margin: 3rem auto;
   background-color: var(--color-primary);
   color: var(--color-text);
+  box-shadow: var(--shadow);
 }
 
 .gridContainer {
   display: grid;
-  grid-template-columns: repeat(3, 1fr) 
+  grid-template-columns: repeat(4, 1fr) 
+}
+
+.modal {
+  width: 40%;
+  height: 70%;
+  text-align: center;
+  padding: 1.5rem;
+  left: 30%;
+  top: 15%;
 }
