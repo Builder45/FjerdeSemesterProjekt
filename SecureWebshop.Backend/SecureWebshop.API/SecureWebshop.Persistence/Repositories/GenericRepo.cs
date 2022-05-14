@@ -1,6 +1,7 @@
 ﻿using Raven.Client.Documents;
 using SecureWebshop.Application.Repositories;
 using SecureWebshop.Persistence.Context;
+using System.Globalization;
 
 namespace SecureWebshop.Persistence.Repositories
 {
@@ -46,6 +47,30 @@ namespace SecureWebshop.Persistence.Repositories
                 .Skip(skip)
                 .Take(take)
                 .ToListAsync();
+
+
+            return entities;
+        }
+
+        public async Task<IEnumerable<T>> GetAllByCondition(int pageSize, int pageNumber, Func<T, bool> condition)
+        {
+            int skip = pageSize * (pageNumber - 1);
+            int take = pageSize;
+
+            using var session = _context.Store.OpenAsyncSession();
+
+            var entities = await session
+                .Query<T>()
+                .ToListAsync();
+
+            entities = entities
+                .Where(condition)
+                .ToList();
+
+            entities = entities
+                .Skip(skip)
+                .Take(take)
+                .ToList();
 
             return entities;
         }

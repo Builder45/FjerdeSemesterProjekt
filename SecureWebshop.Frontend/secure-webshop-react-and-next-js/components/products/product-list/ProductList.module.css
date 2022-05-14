@@ -8,14 +8,15 @@
 
 .gridContainer {
   display: grid;
-  grid-template-columns: repeat(4, 1fr) 
+  grid-template-columns: repeat(4, 1fr);
+  padding: 0.5rem;
 }
 
 .modal {
   width: 40%;
   height: 70%;
   text-align: center;
-  padding: 1.5rem;
+  padding: 0;
   left: 30%;
   top: 15%;
 }

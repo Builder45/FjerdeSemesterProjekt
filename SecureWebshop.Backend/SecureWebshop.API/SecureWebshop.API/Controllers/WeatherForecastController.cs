@@ -19,7 +19,6 @@ namespace SecureWebshop.API.Controllers
             _logger = logger;
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {

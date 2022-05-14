@@ -33,7 +33,7 @@ namespace SecureWebshop.API.Controllers
             return Ok(response.Product);
         }
 
-        // GET => URL/api/Products?pageSize=10&pageNumber=1
+        // GET => URL/api/Products?pageSize=10&pageNumber=1&search=searchTerm
         [AllowAnonymous]
         [HttpGet()]
         public async Task<IActionResult> GetProducts([FromQuery] QueryRequest queryRequest)

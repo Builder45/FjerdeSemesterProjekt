@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import useModal from '../../../hooks/useModal';
+import { cartActions } from '../../../store';
 import { getProduct } from '../../../utils/api-service';
 import Modal from '../../ui/modal/Modal';
 import classes from './ProductList.module.css';
@@ -8,6 +10,7 @@ import ProductListItemDetails from './ProductListItemDetails';
 
 export default function ProductList({ products = [] }) {
 
+  const dispatch = useDispatch();
   const { modalIsVisible, toggleModal, modalHandler } = useModal();
   const [ selectedProductId, setSelectedProductId ] = useState(null);
   const [ product, setProduct ] = useState(null);
@@ -15,6 +18,14 @@ export default function ProductList({ products = [] }) {
   const showDetailsHandler = id => {
     setSelectedProductId(id);
     toggleModal();
+  }
+
+  const addToCartHandler = product => {
+    dispatch(cartActions.addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price
+    }));
   }
 
   useEffect(() => {
@@ -30,7 +41,13 @@ export default function ProductList({ products = [] }) {
   }, [selectedProductId]);
 
   const mappedProducts = products.map(
-    product => <ProductListItem key={product.id} product={product} onShowDetails={showDetailsHandler.bind(this, product.id)}/>
+    product => 
+      <ProductListItem 
+        key={product.id} 
+        product={product} 
+        onShowDetails={showDetailsHandler.bind(this, product.id)} 
+        onAddToCart={addToCartHandler.bind(this, product)}
+      />
   );
 
   return (

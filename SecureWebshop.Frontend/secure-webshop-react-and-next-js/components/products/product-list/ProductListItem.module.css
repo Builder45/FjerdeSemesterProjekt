@@ -1,8 +1,8 @@
 .product {
-  cursor: pointer;
-  width: calc(100% - 4rem);
+  position: relative;
+  width: 90%;
   height: auto;
-  margin: 2rem;
+  margin: 5%;
   background-color: var(--color-secondary);
   box-shadow: var(--shadow);
   border-radius: 5px;
@@ -13,6 +13,7 @@
 }
 
 .thumbnail {
+  cursor: pointer;
   width: 100%;
   height: 15rem;
 }
@@ -35,6 +36,10 @@
   justify-content: space-between;
 }
 
+.infoName {
+  cursor: pointer;
+}
+
 .infoName, .infoPrice {
   font-size: var(--size-5);
   margin: 0.3rem 0.3rem;
@@ -42,4 +47,22 @@
 
 .infoRating {
   margin: 0.3rem auto;
+}
+
+.addItem {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  right: 0.4rem;
+  top: 0.4rem;
+  z-index: 100;
+  color: var(--color-text);
+  background-color: var(--color-secondary);
+  border: 1px solid var(--color-primary);
+  border-radius: 5px;
+  font-size: var(--size-5);
+}
+
+.addItem:hover {
+  background-color: var(--color-primary);
 }

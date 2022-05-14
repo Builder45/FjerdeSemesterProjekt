@@ -4,6 +4,7 @@ using SecureWebshop.Application.Requests;
 using SecureWebshop.Application.Requests.Products;
 using SecureWebshop.Application.Responses.Products;
 using SecureWebshop.Domain.Entities;
+using System.Globalization;
 
 namespace SecureWebshop.Application.Services.Products
 {
@@ -37,7 +38,19 @@ namespace SecureWebshop.Application.Services.Products
 
         public async Task<ProductsResponse> GetProductsAsync(QueryRequest queryRequest)
         {
-            var products = await _genericProductRepo.GetAll(queryRequest.PageSize, queryRequest.PageNumber);
+            IEnumerable<Product> products;
+
+            if (String.IsNullOrWhiteSpace(queryRequest.Search))
+            {
+                products = await _genericProductRepo.GetAll(queryRequest.PageSize, queryRequest.PageNumber);
+            }
+            else
+            {
+                products = await _genericProductRepo.GetAllByCondition(queryRequest.PageSize, queryRequest.PageNumber, 
+                    product => product.Name.Contains(queryRequest.Search, StringComparison.CurrentCultureIgnoreCase)
+                );
+            }
+            
             var productDtos = new List<ProductDto>();
 
             foreach (var product in products)

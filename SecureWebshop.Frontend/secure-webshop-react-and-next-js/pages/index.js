@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import ProductList from "../components/products/product-list/ProductList";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
-import { getProducts } from "../utils/api-service";
+import { getProducts, getProductsByQuery } from "../utils/api-service";
 
 /* 
   Server-side kode
@@ -10,16 +10,25 @@ import { getProducts } from "../utils/api-service";
 export async function getServerSideProps({ query }) {
   let initProducts = [];
   try {
-    const response = await getProducts();
+    if (query.search) {
+      const response = await getProductsByQuery({ search: query.search });
       if (response.data) {
         initProducts = response.data;
       }
+    }
+    else {
+      const response = await getProducts();
+      if (response.data) {
+        initProducts = response.data;
+      }
+    }
   }
   catch {}
 
   return {
     props: {
-      initProducts
+      initProducts,
+      query
     }
   }
 }
@@ -27,8 +36,7 @@ export async function getServerSideProps({ query }) {
 /* 
   Client-side kode
 */
-export default function HomePage({ initProducts }) {
-
+export default function HomePage({ initProducts, query }) {
   const [ products, setProducts ] = useState(initProducts);
 
   // useEffect(() => {
@@ -40,6 +48,7 @@ export default function HomePage({ initProducts }) {
   // }, []);
 
   if (products === null) return <p className="center">Kunne ikke hente produkter ned...</p>
+  if (products.length === 0 && query?.search) return <p className="center">Søgningen gav ingen resultater.</p>
   if (products.length === 0) return <LoadingSpinner />
 
   return (

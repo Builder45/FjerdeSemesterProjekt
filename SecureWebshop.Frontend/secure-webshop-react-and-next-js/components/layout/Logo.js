@@ -1,9 +1,7 @@
 import classes from './Logo.module.css';
 
-function Logo() {
+export default function Logo() {
   return (
     <div className={classes.logo}>SecureWebshop</div>
   );
 }
-
-export default Logo;

@@ -10,6 +10,8 @@ using SecureWebshop.Application.Services.Auth;
 using Microsoft.AspNetCore.Cors;
 using SecureWebshop.Application.Services.Users;
 using SecureWebshop.Application.Services.Products;
+using SecureWebshop.API;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
