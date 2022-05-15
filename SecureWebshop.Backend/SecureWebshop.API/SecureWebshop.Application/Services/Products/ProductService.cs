@@ -112,10 +112,49 @@ namespace SecureWebshop.Application.Services.Products
 
             return new UpdateProductResponse { Success = true };
         }
+
         public async Task<UpdateProductResponse> DeactivateProductAsync(string productId)
         {
             // await _productRepo.Deactivate(productId);
 
+            return new UpdateProductResponse { Success = true };
+        }
+
+        public async Task<UpdateProductResponse> UpdateProductReviewsAsync(UpdateProductReviewsRequest request)
+        {
+            if (request.UserId == null)
+            {
+                return new UpdateProductResponse { Success = false, Error = "Authorized User Id required" };
+            }
+
+            var product = await _genericProductRepo.Get(request.ProductId);
+
+            if (product == null)
+            {
+                return new UpdateProductResponse { Success = false, Error = "Invalid product ID" };
+            }
+
+            var existingReview = product.Reviews.FirstOrDefault(review => review.UserId == request.UserId);
+
+            if (existingReview != null)
+            {
+                existingReview.Author = request.Author;
+                existingReview.Text = request.Text;
+                existingReview.Rating = request.Rating;
+                await _genericProductRepo.CreateOrUpdate(product);
+                return new UpdateProductResponse { Success = true };
+            }
+
+            var newReview = new ProductReview
+            {
+                UserId = request.UserId,
+                Author = request.Author,
+                Text = request.Text,
+                Rating = request.Rating
+            };
+
+            product.Reviews.Add(newReview);
+            await _genericProductRepo.CreateOrUpdate(product);
             return new UpdateProductResponse { Success = true };
         }
     }

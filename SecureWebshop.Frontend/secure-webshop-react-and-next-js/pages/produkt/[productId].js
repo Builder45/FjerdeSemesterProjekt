@@ -1,3 +1,4 @@
+import Product from "../../components/products/product-page/Product";
 import { getProduct } from "../../utils/api-service";
 
 /* 
@@ -30,10 +31,6 @@ export default function ProductPage({ product }) {
   }
 
   return (
-    <div>
-      <p>{product.name}</p>
-      <p>{product.description}</p>
-      <p>{product.price}</p>
-    </div>
+    <Product product={product} />
   );
 }

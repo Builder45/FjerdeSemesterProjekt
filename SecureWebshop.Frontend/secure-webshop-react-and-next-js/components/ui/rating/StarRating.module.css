@@ -1,6 +1,4 @@
 .starRating {
-  height: auto;
-  width: auto;
   display: flex;
-  margin: auto;
+  gap: 1px;
 }

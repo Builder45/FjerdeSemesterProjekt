@@ -13,9 +13,12 @@ function getStarType(rating, starIndex) {
 }
 
 
-export default function StarRating({ rating, size = "16px" }) {
+export default function StarRating({ rating, size = 16 }) {
+
+  const dynamicStyle = { width: `${size * 5 + 4}px`, height: `${size}px` };
+
   return (
-    <div className={classes.starRating}>
+    <div className={classes.starRating} style={dynamicStyle}>
       <Image src={getStarType(rating, 0)} width={size} height={size}/>
       <Image src={getStarType(rating, 1)} width={size} height={size}/>
       <Image src={getStarType(rating, 2)} width={size} height={size}/>

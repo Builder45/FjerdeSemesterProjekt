@@ -12,5 +12,6 @@ namespace SecureWebshop.Application.Services.Products
         Task<UpdateProductResponse> UpdateProductAsync(UpdateProductRequest updateProductRequest);
         Task<UpdateProductResponse> DeleteProductAsync(string productId);
         Task<UpdateProductResponse> DeactivateProductAsync(string productId);
+        Task<UpdateProductResponse> UpdateProductReviewsAsync(UpdateProductReviewsRequest request);
     }
 }

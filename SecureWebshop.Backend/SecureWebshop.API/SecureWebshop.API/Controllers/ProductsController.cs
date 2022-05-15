@@ -92,5 +92,22 @@ namespace SecureWebshop.API.Controllers
 
             return Ok();
         }
+
+        [Authorize]
+        [HttpPost("{productId}/Reviews")]
+        public async Task<IActionResult> AddProductReview([FromRoute] string productId, [FromBody] UpdateProductReviewsRequest request)
+        {
+            request.ProductId = productId;
+            request.UserId = UserId;
+
+            var response = await _productService.UpdateProductReviewsAsync(request);
+
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok();
+        }
     }
 }
