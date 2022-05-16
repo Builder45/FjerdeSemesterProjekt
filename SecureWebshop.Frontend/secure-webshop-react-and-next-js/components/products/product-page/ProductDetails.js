@@ -1,9 +1,20 @@
 import classes from './ProductDetails.module.css';
 import StarRating from '../../ui/rating/StarRating.js';
 import Button from '../../ui/Button';
+import LinkText from '../../ui/LinkText';
+import { useDispatch } from 'react-redux';
+import { cartActions } from '../../../store';
 
 export default function ProductDetails({ product = {} }) {
-  const { name, description, price, imageUrl, rating, totalReviews } = product;
+  const { id, name, description, price, imageUrl, rating, totalReviews } = product;
+
+  const dispatch = useDispatch();
+
+  const addItemHandler = item => {
+    dispatch(cartActions.addItem({
+      id, name, price
+    }));
+  }
 
   return (
     <div className={classes.productDetails}>
@@ -15,10 +26,12 @@ export default function ProductDetails({ product = {} }) {
         <p className={classes.description}>{description}</p>
         <div className={classes.rating}>
           <StarRating rating={rating} size={26}/>
-          <p>({rating} - {totalReviews} anmeldelser)</p>
+          {totalReviews > 0 && <p>{rating.toFixed(1)} ({totalReviews})</p>}
+          {!totalReviews && <p>Ingen anmeldelser</p>}
+          {/* <LinkText href={`/produkt/${id}#anmeldelser`} text="Skriv en anmeldelse"/> */}
         </div>
         <p className={classes.price}>{price} kr</p>
-        <Button className={classes.addItemButton}>Tilføj til kurven</Button>
+        <Button className={classes.addItemButton} onClick={addItemHandler}>Tilføj til kurven</Button>
       </div>
     </div>
   );

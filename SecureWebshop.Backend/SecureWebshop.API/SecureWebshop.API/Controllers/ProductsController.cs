@@ -94,8 +94,8 @@ namespace SecureWebshop.API.Controllers
         }
 
         [Authorize]
-        [HttpPost("{productId}/Reviews")]
-        public async Task<IActionResult> AddProductReview([FromRoute] string productId, [FromBody] UpdateProductReviewsRequest request)
+        [HttpPut("{productId}/Reviews")]
+        public async Task<IActionResult> UpdateProductReview([FromRoute] string productId, [FromBody] UpdateProductReviewsRequest request)
         {
             request.ProductId = productId;
             request.UserId = UserId;

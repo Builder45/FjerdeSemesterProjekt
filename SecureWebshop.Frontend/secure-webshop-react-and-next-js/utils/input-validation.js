@@ -2,10 +2,11 @@ const errorBadTypeFormat = "Der er sket en fejl med formattet.";
 const errorBadEmailFormat = "Skriv en gyldig email.";
 const errorBadPhoneNumberFormat = "Skriv et gyldigt telefon nr.";
 const errorWeakPassword = "Kodeordet du har valgt er ikke stærkt nok.";
-const errorEmpty = "Feltet skal udfyldes!"
+const errorEmpty = "Feltet skal udfyldes!";
 
-const errorTooShort = minLength => `Du skal mindst bruge ${minLength} tegn.`
-const errorTooLong = maxLength => `Du kan maks bruge ${maxLength} tegn.`
+const errorTooShort = minLength => `Du skal mindst bruge ${minLength} tegn.`;
+const errorTooLong = maxLength => `Du kan maks bruge ${maxLength} tegn.`;
+const errorNumberOutOfRange = (min, max) => `Tallet skal ligge mellem ${min} og ${max}.`;
 
 const inputIsNumber = input => (typeof input === 'number');
 const inputIsString = input => (typeof input === 'string');
@@ -28,6 +29,18 @@ export function validateText(text, minLength, maxLength) {
   if (inputIsTooLong(text, maxLength)) {
     return { isValid: false, error: errorTooLong(maxLength) };
   }
+  return { isValid: true };
+}
+
+export function validateNumber(number, min, max) {
+  if (isNaN(+number)) {
+    return { isValid: false, error: errorBadTypeFormat };
+  }
+
+  if (number < min || number > max) {
+    return { isValid: false, error: errorNumberOutOfRange(min, max) };
+  }
+
   return { isValid: true };
 }
 

@@ -1,21 +1,20 @@
-// import { cartActions } from "./index";
+import { cartActions } from "./index";
 
+export const fetchCartData = () => {
+  return dispatch => {
+    const cartData = localStorage.getItem('cartData');
+    if (cartData !== null) {
+      const parsedCartData = JSON.parse(cartData);
+      dispatch(cartActions.loadCart({
+        items: parsedCartData.items,
+        totalQuantity: parsedCartData.totalQuantity
+      }));
+    }
+  };
+};
 
-// export const fetchCartData = () => {
-//   return async dispatch => {
-//     try {
-//       //axios get cart data from api:
-//       const cartData;
-//       dispatch(cartActions.loadCart({
-//         items: cartData.items || [],
-//         totalQuantity: cartData.totalQuantity
-//       }));
-//     }
-//     catch (error) {
-//       dispatch(cartActions.loadCart({
-//         items: [],
-//         totalQuantity: 0
-//       }));
-//     }
-//   };
-// };
+export const saveCartData = cart => {
+  return async () => {
+    localStorage.setItem('cartData', JSON.stringify(cart));
+  }
+}

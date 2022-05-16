@@ -44,7 +44,7 @@ export default function MainNavbar({ onToggleCart }) {
       <form className={classes.search} onSubmit={searchHandler}>
         <input type="text" ref={searchRef}></input>
         <button>
-          <Image src={SearchIcon} width={"30px"} height={"30px"}/>
+          <Image src={SearchIcon} width={"20px"} height={"20px"}/>
         </button>
       </form>
       <nav>

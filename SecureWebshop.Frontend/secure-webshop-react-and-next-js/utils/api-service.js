@@ -15,3 +15,14 @@ export const getProductsByQuery = async (params) => {
   console.log(apiRoute);
   return await axios.get(apiRoute);
 };
+
+export const updateProductReview = async (review, productId, token) => {
+  return await axios.put(ApiUrl + 'Products/' + productId + '/Reviews', 
+    {
+      ...review
+    },
+    {
+      headers: { 'Authorization': `Bearer ${token}` }
+    }
+  );
+}

@@ -1,0 +1,25 @@
+.review {
+  width: 100%;
+  font-size: var(--size-5);
+  margin-bottom: 1rem;
+}
+
+.title, .review p {
+  margin: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.title {
+  font-size: var(--size-6);
+  margin-bottom: 0.7rem;
+}
+
+.hr {
+  margin: 1.5rem 0;
+}

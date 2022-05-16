@@ -139,8 +139,13 @@ namespace SecureWebshop.Application.Services.Products
             if (existingReview != null)
             {
                 existingReview.Author = request.Author;
+                existingReview.Title = request.Title;
                 existingReview.Text = request.Text;
                 existingReview.Rating = request.Rating;
+                existingReview.Date = DateTime.Now;
+
+                product.UpdateReviewInformation();
+
                 await _genericProductRepo.CreateOrUpdate(product);
                 return new UpdateProductResponse { Success = true };
             }
@@ -149,11 +154,16 @@ namespace SecureWebshop.Application.Services.Products
             {
                 UserId = request.UserId,
                 Author = request.Author,
+                Title = request.Title,
                 Text = request.Text,
-                Rating = request.Rating
+                Rating = request.Rating,
+                Date = DateTime.Now,
             };
 
             product.Reviews.Add(newReview);
+
+            product.UpdateReviewInformation();
+
             await _genericProductRepo.CreateOrUpdate(product);
             return new UpdateProductResponse { Success = true };
         }

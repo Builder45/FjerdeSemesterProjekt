@@ -38,7 +38,7 @@ namespace SecureWebshop.Application.Services.Auth
 
             var newRefreshToken = new RefreshToken
             {
-                ExpiryDate = DateTime.Now.AddMinutes(5),
+                ExpiryDate = DateTime.Now.AddMinutes(10),
                 CreationDate = DateTime.Now,
                 TokenHash = refreshTokenHashed,
                 TokenSalt = Convert.ToBase64String(salt)

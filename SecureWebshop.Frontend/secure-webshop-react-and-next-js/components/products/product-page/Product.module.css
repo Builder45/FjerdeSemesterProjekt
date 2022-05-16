@@ -1,5 +1,6 @@
-.product {
-  width: 70%;
+.container {
+  width: 60%;
+  min-height: 20rem;
   margin: 3rem auto;
   background-color: var(--color-primary);
   color: var(--color-text);

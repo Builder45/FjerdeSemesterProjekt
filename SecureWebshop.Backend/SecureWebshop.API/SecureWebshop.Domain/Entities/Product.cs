@@ -12,5 +12,15 @@
         public string ThumbnailUrl { get; set; }
         public bool IsActive { get; set; }
         public List<ProductReview> Reviews { get; set; } = new List<ProductReview>();
+
+        public void UpdateReviewInformation()
+        {
+            TotalReviews = Reviews.Count;
+
+            double totalRating = 0;
+            Reviews.ForEach(review => totalRating += review.Rating);
+
+            Rating = totalRating / TotalReviews;
+        }
     }
 }

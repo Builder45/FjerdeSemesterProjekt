@@ -1,4 +1,4 @@
-import { SessionProvider, useSession } from 'next-auth/react';
+import { SessionProvider } from 'next-auth/react';
 import store from '../store/index';
 
 import Layout from '../components/layout/Layout';
@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
+
   return (
     <SessionProvider session={pageProps.session}>
       <Provider store={store}>
