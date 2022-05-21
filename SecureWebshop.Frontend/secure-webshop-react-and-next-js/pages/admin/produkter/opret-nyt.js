@@ -1,4 +1,4 @@
-import { createRequiredAuth } from "../utils/ssr";
+import { createRequiredAuth } from "../../../utils/ssr";
 
 /* 
   Server-side kode
@@ -13,10 +13,8 @@ export async function getServerSideProps(context) {
 /* 
   Client-side kode
 */
-function AdminPage() {
+export default function AdminNewProductPage() {
   return (
-    <p>Secret admin page!</p>
+    <p>Opret nyt produkt!</p>
   )
 }
-
-export default AdminPage;

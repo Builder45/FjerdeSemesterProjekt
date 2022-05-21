@@ -20,28 +20,3 @@ export default function MyApp({ Component, pageProps }) {
     </SessionProvider>
   );
 }
-
-// function Auth({ authOptions, children }) {
-//   const { data: session, status } = useSession();
-//   const sessionFound = !!session;
-//   const router = useRouter();
-
-//   useEffect(() => {
-//     if (status === 'loading') return;
-//     if (!sessionFound) {
-//       router.push('/login');
-//     }
-//   }, [status, sessionFound]);
-
-//   if (sessionFound) {
-//     if (session.user.role === authOptions.role) {
-//       return children;
-//     }
-//     else {
-//       router.push('/unauthorized');
-//     }
-//   }
-
-//   // Session bliver hentet ned / Ingen bruger fundet endnu
-//   return <Loading />
-// }

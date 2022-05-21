@@ -55,7 +55,7 @@ function LoginForm() {
         </div>
         <div className={classes.actions}>
           <Button disabled={!isValid}>Login</Button>
-          <LinkText href='/user/signup' text='Vil du oprette en ny bruger?'/>
+          <LinkText href='/auth/ny-bruger' text='Vil du oprette en ny bruger?'/>
         </div>
       </form>
       <Modal visible={modalIsVisible} btnText={"Prøv igen"} onClick={modalHandler}>Den indtastede email eller password er ikke gyldig!</Modal>

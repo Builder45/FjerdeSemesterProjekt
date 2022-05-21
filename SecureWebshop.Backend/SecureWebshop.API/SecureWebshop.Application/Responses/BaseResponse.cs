@@ -8,9 +8,6 @@ namespace SecureWebshop.Application.Responses
         public bool Success { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string ErrorCode { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Error { get; set; }
     }
 }

@@ -27,7 +27,6 @@ namespace SecureWebshop.Application.Services.Auth
             if (user == null)
             {
                 response.Error = "Email not found";
-                response.ErrorCode = "L02";
                 return response;
             }
 
@@ -36,7 +35,6 @@ namespace SecureWebshop.Application.Services.Auth
             if (user.PasswordHash != requestPasswordHash)
             {
                 response.Error = "Invalid password";
-                response.ErrorCode = "L03";
                 return response;
             }
 
@@ -67,7 +65,7 @@ namespace SecureWebshop.Application.Services.Auth
             }
             catch (Exception)
             {
-                return new LogoutResponse { Success = false, Error = "Unable to logout user", ErrorCode = "L04" };
+                return new LogoutResponse { Success = false, Error = "Unable to logout user" };
             }
         }
 
@@ -78,7 +76,6 @@ namespace SecureWebshop.Application.Services.Auth
             if (!ValidationHelper.EmailIsValid(signupRequest.Email))
             {
                 response.Error = "Email is invalid";
-                response.ErrorCode = "S04";
                 return response;
             }
 
@@ -87,14 +84,12 @@ namespace SecureWebshop.Application.Services.Auth
             if (existingUser != null)
             {
                 response.Error = "User with the same email already exists!";
-                response.ErrorCode = "S02";
                 return response;
             }
 
             if (!ValidationHelper.PasswordIsValid(signupRequest.Password))
             {
                 response.Error = "Password is not strong enough";
-                response.ErrorCode = "S04";
                 return response;
             }
 
@@ -123,7 +118,6 @@ namespace SecureWebshop.Application.Services.Auth
             catch (Exception)
             {
                 response.Error = "Unable to save user";
-                response.ErrorCode = "S05";
                 return response;
             }
         }

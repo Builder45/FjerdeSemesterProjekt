@@ -16,7 +16,7 @@ export default function MainNavbar({ onToggleCart }) {
   const searchRef = useRef();
 
   const logoutHandler = () => {
-    signOut({ callbackUrl: '/login' });
+    signOut({ callbackUrl: '/auth/login' });
   };
 
   const searchHandler = event => {
@@ -24,12 +24,12 @@ export default function MainNavbar({ onToggleCart }) {
     router.push('/?search=' + searchRef.current.value);
   }
 
-  let authElement = <li><Link href='/login'>Login</Link></li>;
+  let authElement = <li><Link href='/auth/login'>Login</Link></li>;
   if (isAuthenticated) {
     authElement = (
       <>
-        <li><Link href='/user/profile'>Profile</Link></li>
-        <li><a onClick={logoutHandler}>Logout</a></li>
+        <li><Link href='/bruger'>Profil</Link></li>
+        <li><a onClick={logoutHandler}>Log ud</a></li>
       </>
     );
   }
@@ -47,7 +47,7 @@ export default function MainNavbar({ onToggleCart }) {
           <Image src={SearchIcon} width={"20px"} height={"20px"}/>
         </button>
       </form>
-      <nav>
+      <nav className={classes.nav}>
         <ul>
           {authElement}
           <li><CartButton onToggle={onToggleCart}/></li>

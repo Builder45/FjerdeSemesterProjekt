@@ -67,3 +67,7 @@
   border: none;
   padding-top: 0.25rem;
 }
+
+.nav a {
+  cursor: pointer;
+}

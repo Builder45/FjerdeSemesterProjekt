@@ -1,8 +1,9 @@
 const errorBadTypeFormat = "Der er sket en fejl med formattet.";
 const errorBadEmailFormat = "Skriv en gyldig email.";
 const errorBadPhoneNumberFormat = "Skriv et gyldigt telefon nr.";
-const errorWeakPassword = "Kodeordet du har valgt er ikke stærkt nok.";
-const errorEmpty = "Feltet skal udfyldes!";
+const errorWeakPassword = "Dit password opfylder ikke kravene.";
+const errorPasswordMismatch = "Indholdet i begge felter skal matche.";
+const errorEmpty = "Feltet skal udfyldes.";
 
 const errorTooShort = minLength => `Du skal mindst bruge ${minLength} tegn.`;
 const errorTooLong = maxLength => `Du kan maks bruge ${maxLength} tegn.`;
@@ -78,7 +79,7 @@ export function validateEmail(email) {
 }
 
 export function validatePassword(password) {
-  const output = validateText(password, 8, 100);
+  const output = validateText(password, 10, 100);
   if (!output.isValid) {
     return output;
   }
@@ -106,15 +107,22 @@ export function validatePassword(password) {
   }
 
   let passwordStrength = 0;
-  passwordStrength += charCounter.lower ? 0 : 1;
-  passwordStrength += charCounter.upper ? 0 : 1;
-  passwordStrength += charCounter.digit ? 0 : 1;
-  passwordStrength += charCounter.special ? 0 : 1;
+  passwordStrength += charCounter.lower ? 1 : 0;
+  passwordStrength += charCounter.upper ? 1 : 0;
+  passwordStrength += charCounter.digit ? 1 : 0;
+  passwordStrength += charCounter.special ? 1 : 0;
 
   if (passwordStrength > 2) {
     return { isValid: true };
   }
-  else {
-    return { isValid: false, error: errorWeakPassword }
+
+  return { isValid: false, error: errorWeakPassword };
+}
+
+export function validatePasswordMatch(password, repeatPassword) {
+  if (password === repeatPassword) {
+    return { isValid: true };
   }
+
+  return { isValid: false, error: errorPasswordMismatch };
 }

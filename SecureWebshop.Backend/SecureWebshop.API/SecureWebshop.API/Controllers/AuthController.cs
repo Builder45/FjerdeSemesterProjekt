@@ -30,8 +30,7 @@ namespace SecureWebshop.API.Controllers
             {
                 return BadRequest(new TokenResponse
                 {
-                    Error = "Missing login details",
-                    ErrorCode = "L01"
+                    Error = "Missing login details"
                 });
             }
 
@@ -41,8 +40,7 @@ namespace SecureWebshop.API.Controllers
             {
                 return Unauthorized(new
                 {
-                    loginResponse.Error,
-                    loginResponse.ErrorCode
+                    loginResponse.Error
                 });
             }
 
@@ -57,8 +55,7 @@ namespace SecureWebshop.API.Controllers
             {
                 return BadRequest(new TokenResponse
                 {
-                    Error = "Missing refresh token details",
-                    ErrorCode = "R01"
+                    Error = "Missing refresh token details"
                 });
             }
 

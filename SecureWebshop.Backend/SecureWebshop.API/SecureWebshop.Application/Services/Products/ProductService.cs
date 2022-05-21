@@ -24,11 +24,8 @@ namespace SecureWebshop.Application.Services.Products
                 Name = updateProductRequest.Name,
                 Description = updateProductRequest.Description,
                 Price = updateProductRequest.Price,
-                Rating = updateProductRequest.Rating,
-                TotalReviews = updateProductRequest.TotalReviews,
                 ImageUrl = updateProductRequest.ImageUrl,
-                ThumbnailUrl = updateProductRequest.ThumbnailUrl,
-                IsActive = true
+                ThumbnailUrl = updateProductRequest.ThumbnailUrl
             };
 
             await _genericProductRepo.CreateOrUpdate(newProduct);
@@ -86,19 +83,18 @@ namespace SecureWebshop.Application.Services.Products
             };
         }
 
-        public async Task<UpdateProductResponse> UpdateProductAsync(UpdateProductRequest updateProductRequest)
+        public async Task<UpdateProductResponse> UpdateProductAsync(UpdateProductRequest request)
         {
             var newProduct = new Product
             {
-                Id = updateProductRequest.Id,
-                Name = updateProductRequest.Name,
-                Description = updateProductRequest.Description,
-                Price = updateProductRequest.Price,
-                Rating = updateProductRequest.Rating,
-                TotalReviews = updateProductRequest.TotalReviews,
-                ImageUrl = updateProductRequest.ImageUrl,
-                ThumbnailUrl = updateProductRequest.ThumbnailUrl,
-                IsActive = true
+                Id = request.Id,
+                Name = request.Name,
+                Description = request.Description,
+                Price = request.Price,
+                PriceReduction = request.PriceReduction,
+                ImageUrl = request.ImageUrl,
+                ThumbnailUrl = request.ThumbnailUrl,
+                Status = request.Status
             };
 
             await _genericProductRepo.CreateOrUpdate(newProduct);
@@ -134,35 +130,17 @@ namespace SecureWebshop.Application.Services.Products
                 return new UpdateProductResponse { Success = false, Error = "Invalid product ID" };
             }
 
-            var existingReview = product.Reviews.FirstOrDefault(review => review.UserId == request.UserId);
-
-            if (existingReview != null)
-            {
-                existingReview.Author = request.Author;
-                existingReview.Title = request.Title;
-                existingReview.Text = request.Text;
-                existingReview.Rating = request.Rating;
-                existingReview.Date = DateTime.Now;
-
-                product.UpdateReviewInformation();
-
-                await _genericProductRepo.CreateOrUpdate(product);
-                return new UpdateProductResponse { Success = true };
-            }
-
             var newReview = new ProductReview
             {
-                UserId = request.UserId,
                 Author = request.Author,
                 Title = request.Title,
                 Text = request.Text,
                 Rating = request.Rating,
                 Date = DateTime.Now,
+                UserId = request.UserId
             };
 
-            product.Reviews.Add(newReview);
-
-            product.UpdateReviewInformation();
+            product.AddReview(newReview);
 
             await _genericProductRepo.CreateOrUpdate(product);
             return new UpdateProductResponse { Success = true };

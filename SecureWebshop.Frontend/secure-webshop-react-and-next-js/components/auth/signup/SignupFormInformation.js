@@ -13,7 +13,7 @@ export default function SignupFormInformation({ onClickContinue, onClickBack, on
     phoneNumber: signupData.phoneNumber ? signupData.phoneNumber : ""
   };
   const validations = [
-    { id: "firstName", method: ({firstName}) => validateText(firstName, 1, 100) },
+    { id: "firstName", method: ({firstName}) => validateText(firstName, 1, 50) },
     { id: "lastName", method: ({lastName}) => validateText(lastName, 1, 100) },
     { id: "phoneNumber", method: ({phoneNumber}) => validatePhoneNumber(phoneNumber) }
   ];
@@ -29,13 +29,8 @@ export default function SignupFormInformation({ onClickContinue, onClickBack, on
 
   const previousSignupHandler = event => {
     event.preventDefault();
-    if (isValid) {
-      onDataChange(input);
-      onClickBack();
-    }
-    else {
-      // if invalid, warn of lost data
-    }
+    onDataChange(input);
+    onClickBack();
   };
 
   const firstNameError = touched.firstName && errors.firstName ? errors.firstName : "";

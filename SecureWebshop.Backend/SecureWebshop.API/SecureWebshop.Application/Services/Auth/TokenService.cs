@@ -73,14 +73,12 @@ namespace SecureWebshop.Application.Services.Auth
             if (user == null)
             {
                 response.Error = "Invalid Id - No such user exists";
-                response.ErrorCode = "R02";
                 return response;
             }
 
             if (user.RefreshToken == null)
             {
                 response.Error = "Invalid session or user is already logged out";
-                response.ErrorCode = "R02";
                 return response;
             }
 
@@ -88,14 +86,12 @@ namespace SecureWebshop.Application.Services.Auth
             if (user.RefreshToken.TokenHash != requestTokenHash)
             {
                 response.Error = "Invalid refresh token!";
-                response.ErrorCode = "R03";
                 return response;
             }
 
             if (user.RefreshToken.ExpiryDate < DateTime.Now)
             {
                 response.Error = "Refresh token has expired!";
-                response.ErrorCode = "R04";
                 return response;
             }
 

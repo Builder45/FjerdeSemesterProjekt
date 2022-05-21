@@ -21,8 +21,12 @@ export default function Cart({ onToggle, visible }) {
     dispatch(cartActions.removeItem(id));
   };
 
-  const cartItemElements = cartItems.map(
-    item => <CartItem key={item.id} item={item} onAdd={addToCartHandler.bind(null, item)} onRemove={removeFromCartHandler.bind(null, item.id)}/>
+  const cartItemElements = cartItems.map(item => 
+    <CartItem key={item.id} item={item} 
+      onAdd={addToCartHandler.bind(null, item)} 
+      onRemove={removeFromCartHandler.bind(null, item.id)}
+      onCartToggle={onToggle}
+    />
   );
 
   return (

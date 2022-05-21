@@ -9,7 +9,7 @@ export function createRequiredAuth({ allowedRoles = [] }) {
     if (session && session.error) {
       return {
         redirect: {
-          destination: '/session-expired',
+          destination: '/auth/session-udloebet',
           permanent: false
         }
       };
@@ -28,7 +28,7 @@ export function createRequiredAuth({ allowedRoles = [] }) {
       // Hvis der findes en session, men hvor rollen ikke matcher:
       return {
         redirect: {
-          destination: '/unauthorized',
+          destination: '/auth/ingen-adgang',
           permanent: false
         }
       };
@@ -37,7 +37,7 @@ export function createRequiredAuth({ allowedRoles = [] }) {
     // Hvis der ikke findes en session:
     return {
       redirect: {
-        destination: '/login',
+        destination: '/auth/login',
         permanent: false
       }
     };

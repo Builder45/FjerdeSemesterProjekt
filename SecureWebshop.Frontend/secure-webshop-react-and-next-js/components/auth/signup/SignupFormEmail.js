@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import useForm from '../../../hooks/useForm';
 import useModal from '../../../hooks/useModal';
+import { emailExists } from '../../../utils/api-service';
 import { validateEmail } from '../../../utils/input-validation';
 import Button from '../../ui/Button';
 import Input from '../../ui/forms/Input';
@@ -27,17 +28,22 @@ export default function SignupFormEmail({ onClickContinue, signupData, onDataCha
   const continueSignupHandler = async event => {
     event.preventDefault();
     if (isValid) {
-      // Http request (email exist?)
       setIsProcessing(true);
-      const { data } = await axios.get('http://localhost:5117/api/' + 'Auth/EmailExists/' + input.email);
-      if (!data || data.emailExists) {
-        setIsProcessing(false);
-        toggleModal();
+
+      try {
+        const { data } = await emailExists(input.email);
+        console.log(data);
+
+        if (!data || data.emailExists) {
+          setIsProcessing(false);
+          toggleModal();
+        }
+        else {
+          onClickContinue();
+          onDataChange(input);
+        }
       }
-      else {
-        onClickContinue();
-        onDataChange(input);
-      }
+      catch {}
     }
   };
 
@@ -51,7 +57,7 @@ export default function SignupFormEmail({ onClickContinue, signupData, onDataCha
         </div>
         <div className={classes.actions}>
           <Button disabled={!isValid} onClick={continueSignupHandler}>Fortsæt</Button>
-          <LinkText href='/login' text='Har du allerede en bruger?'/>
+          <LinkText href='/auth/login' text='Har du allerede en bruger?'/>
         </div>
       </SignupForm>
       <Modal visible={modalIsVisible} btnText={"Prøv igen"} onClick={modalHandler}>Der eksisterer allerede en bruger med denne email!</Modal>

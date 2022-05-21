@@ -10,8 +10,8 @@ export default function useAuth() {
   useEffect(() => {
     // Hvis der opstår fejl i token refresh, skal brugeren logges af:
     if (session?.error === "ErrorRefreshingAccessToken") {
-      router.push('/session-expired');
-      return { isAuthenticated: false, authStatus: status };
+      router.push('/auth/session-udloebet');
+        return { isAuthenticated: false, authStatus: status };
     }
     if (session === null) {
       setIsAuthenticated(false);

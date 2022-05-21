@@ -3,3 +3,18 @@
   margin: auto;
   text-align: center;
 }
+
+.rating {
+  position: relative;
+  width: 130px;
+  margin: 1.5rem auto;
+}
+
+.rating input {
+  position: absolute;
+  width: 130px;
+  z-index: 1000;
+  top: 0;
+  left: -1px;
+  opacity: 0;
+}

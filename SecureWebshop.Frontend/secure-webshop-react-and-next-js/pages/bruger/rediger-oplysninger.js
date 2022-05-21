@@ -1,4 +1,5 @@
 import axios from "axios";
+import UpdateUserInfoForm from "../../components/user/UpdateUserInfoForm";
 import { createRequiredAuth } from "../../utils/ssr";
 
 /* 
@@ -14,17 +15,16 @@ export async function getServerSideProps(context) {
       'Authorization': `Bearer ${ssr.props.user.accessToken}`
     }
   });
-  ssr.props.initialData = response.data;
+  ssr.props.userData = response.data;
 
   return ssr;
-
 }
 
 /* 
   Client-side kode
 */
-function UserProfilePage({ initialData }) {
-  return <div><p>Welcome {initialData.firstName + " " + initialData.lastName}!</p></div>;
+export default function UserUpdateInformationPage({ userData }) {
+  return (
+    <UpdateUserInfoForm initialData={userData} />
+  );
 }
-
-export default UserProfilePage;

@@ -2,6 +2,9 @@ import axios from "axios";
 
 const ApiUrl = 'http://localhost:5117/api/';
 
+export const emailExists = async (email) => await axios.get(ApiUrl + 'Auth/EmailExists/' + email);
+export const createUser = async (user) => await axios.post(ApiUrl + 'Auth/Signup', { ...user });
+
 export const getProducts = async () => await axios.get(ApiUrl + 'Products');
 export const getProduct = async (id) => await axios.get(ApiUrl + 'Products/' + id);
 

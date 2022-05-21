@@ -1,6 +1,7 @@
 .reviews {
   width: 70%;
   margin: auto;
+  padding-bottom: 1rem;
 }
 
 .reviews h3 {

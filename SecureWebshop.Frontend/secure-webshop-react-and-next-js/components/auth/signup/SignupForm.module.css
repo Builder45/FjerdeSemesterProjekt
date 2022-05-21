@@ -47,3 +47,10 @@
   margin: auto;
   width: 90%;
 }
+
+.passwordHelp {
+  cursor: pointer;
+  margin-top: -1rem;
+  padding-bottom: 1rem;
+  text-decoration: underline;
+}
