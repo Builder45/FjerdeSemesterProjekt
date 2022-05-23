@@ -1,7 +1,7 @@
-import ProductsTable from "../../../components/admin/products/ProductsTable";
-import Card from "../../../components/ui/containers/Card";
-import { getProducts } from "../../../utils/api-service";
-import { createRequiredAuth } from "../../../utils/ssr";
+import ProductsTable from "/components/admin/products/ProductsTable";
+import Card from "/components/ui/containers/Card";
+import { getProducts } from "/utils/api-service";
+import { createRequiredAuth } from "/utils/ssr";
 
 /* 
   Server-side kode

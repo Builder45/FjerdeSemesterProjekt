@@ -1,7 +1,7 @@
-import ProductDetails from "../../../components/products/product-page/ProductDetails";
-import Card from "../../../components/ui/containers/Card";
-import { getProduct } from "../../../utils/api-service";
-import { createRequiredAuth } from "../../../utils/ssr";
+import ProductDetails from "/components/products/product-page/ProductDetails";
+import Card from "/components/ui/containers/Card";
+import { getProduct } from "/utils/api-service";
+import { createRequiredAuth } from "/utils/ssr";
 
 /* 
   Server-side kode

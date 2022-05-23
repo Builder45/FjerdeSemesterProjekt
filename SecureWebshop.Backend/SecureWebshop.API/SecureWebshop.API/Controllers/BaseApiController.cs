@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace SecureWebshop.API.Controllers
 {
-    [DefaultDeny]
+    [Authorize]
     public class BaseApiController : ControllerBase
     {
         protected string? UserId => FindClaim(ClaimTypes.NameIdentifier);

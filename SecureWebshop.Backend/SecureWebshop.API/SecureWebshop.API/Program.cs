@@ -7,11 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SecureWebshop.Application.Helpers;
 using SecureWebshop.Application.Services.Auth;
-using Microsoft.AspNetCore.Cors;
 using SecureWebshop.Application.Services.Users;
 using SecureWebshop.Application.Services.Products;
-using SecureWebshop.API;
-using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,7 +57,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateIssuerSigningKey = true,
             ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero,
+            ClockSkew = TimeSpan.FromMinutes(1),
             ValidIssuer = builder.Configuration.GetSection("JWT:Issuer").Value,
             ValidAudience = builder.Configuration.GetSection("JWT:Audience").Value,
             IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(builder.Configuration.GetSection("JWT:Key").Value))

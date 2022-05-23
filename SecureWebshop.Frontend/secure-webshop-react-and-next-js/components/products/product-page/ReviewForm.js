@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import useAuth from '../../../hooks/useAuth';
-import useForm from '../../../hooks/useForm';
-import useModal from '../../../hooks/useModal';
-import { updateProductReview } from '../../../utils/api-service';
-import { validateNumber, validateText } from '../../../utils/input-validation';
+import useAuth from '/hooks/useAuth';
+import useForm from '/hooks/useForm';
+import useModal from '/hooks/useModal';
+import { updateProductReview } from '/utils/api-service';
+import { validateNumber, validateText } from '/utils/input-validation';
 import Button from '../../ui/Button';
 import Input from '../../ui/forms/Input';
 import LoadingSpinner from '../../ui/LoadingSpinner';
@@ -14,7 +14,6 @@ import classes from './ReviewForm.module.css';
 
 export default function ReviewForm({ productId }) {
 
-  const { token } = useAuth();
   const [ isProcessing, setIsProcessing ] = useState(false);
   const { modalIsVisible, toggleModal, modalHandler } = useModal();
   const router = useRouter();
@@ -43,7 +42,7 @@ export default function ReviewForm({ productId }) {
         rating: input.rating
       };
       try {
-        await updateProductReview(review, productId, token);
+        await updateProductReview(review, productId);
         setIsProcessing(false);
         router.reload();
       }

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
-import LoginForm from "../../components/auth/LoginForm";
-import LoadingSpinner from "../../components/ui/LoadingSpinner";
-import useAuth from "../../hooks/useAuth";
+import LoginForm from "/components/auth/LoginForm";
+import LoadingSpinner from "/components/ui/LoadingSpinner";
+import useAuth from "/hooks/useAuth";
 
 export default function Login() {
   const { isAuthenticated, authStatus } = useAuth();

@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const errorBadTypeFormat = "Der er sket en fejl med formattet.";
 const errorBadEmailFormat = "Skriv en gyldig email.";
 const errorBadPhoneNumberFormat = "Skriv et gyldigt telefon nr.";
@@ -125,4 +127,9 @@ export function validatePasswordMatch(password, repeatPassword) {
   }
 
   return { isValid: false, error: errorPasswordMismatch };
+}
+
+export function validatePostalCode(postalCode) {
+  if (!postalCode) return { isValid: false, error: "error" };
+  return { isValid: true};
 }

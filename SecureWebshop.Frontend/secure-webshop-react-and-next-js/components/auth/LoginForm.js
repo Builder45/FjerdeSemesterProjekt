@@ -1,25 +1,24 @@
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import useForm from '../../hooks/useForm';
-import useModal from '../../hooks/useModal';
+import { uiActions } from '../../store';
 import { validateEmail, validateText } from '../../utils/input-validation';
 import Button from '../ui/Button';
 import Input from '../ui/forms/Input';
 import LinkText from '../ui/LinkText';
 import LoadingSpinner from '../ui/LoadingSpinner';
-import Modal from '../ui/modal/Modal';
 import classes from './LoginForm.module.css';
 
 function LoginForm() {
   const [ isProcessing, setIsProcessing ] = useState(false);
-  const { modalIsVisible, toggleModal, modalHandler } = useModal();
+  const dispatch = useDispatch();
 
   const initialFormState = { email: "" , password: "" };
   const validations = [
     { id: "email", method: ({email}) => validateEmail(email) },
     { id: "password", method: ({password}) => validateText(password, 1, 100) }
   ];
-
   const { input, isValid, errors, touched, changeHandler, blurHandler } = useForm(initialFormState, validations);
 
   if (isProcessing) return <LoadingSpinner/>
@@ -37,7 +36,7 @@ function LoginForm() {
 
       if (result.error) {
         setIsProcessing(false);
-        toggleModal();
+        dispatch(uiActions.setNotification("Den indtastede email eller password er ikke gyldig!"));
       }
     }
   };
@@ -58,7 +57,6 @@ function LoginForm() {
           <LinkText href='/auth/ny-bruger' text='Vil du oprette en ny bruger?'/>
         </div>
       </form>
-      <Modal visible={modalIsVisible} btnText={"Prøv igen"} onClick={modalHandler}>Den indtastede email eller password er ikke gyldig!</Modal>
     </section>
   );
 }

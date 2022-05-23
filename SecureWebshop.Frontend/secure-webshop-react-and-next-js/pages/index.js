@@ -1,7 +1,7 @@
 import { useState } from "react";
-import ProductList from "../components/products/product-list/ProductList";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
-import { getProducts, getProductsByQuery } from "../utils/api-service";
+import ProductList from "/components/products/product-list/ProductList";
+import LoadingSpinner from "/components/ui/LoadingSpinner";
+import { getProducts, getProductsByQuery } from "/utils/api-service";
 
 /* 
   Server-side kode

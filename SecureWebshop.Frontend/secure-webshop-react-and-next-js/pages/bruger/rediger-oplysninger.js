@@ -1,6 +1,6 @@
-import axios from "axios";
-import UpdateUserInfoForm from "../../components/user/UpdateUserInfoForm";
-import { createRequiredAuth } from "../../utils/ssr";
+import { getUserProfile } from "/utils/api-service";
+import UpdateUserInfoForm from "/components/user/UpdateUserInfoForm";
+import { createRequiredAuth } from "/utils/ssr";
 
 /* 
   Server-side kode
@@ -10,12 +10,16 @@ export async function getServerSideProps(context) {
   const ssr = await createRequiredAuth({ allowedRoles: ["User", "Admin"] })({ req: context.req });
   if (!ssr.props) return ssr;
 
-  const response = await axios.get('http://localhost:5117/api/' + 'Users/GetProfile', {
-    headers: {
-      'Authorization': `Bearer ${ssr.props.user.accessToken}`
-    }
-  });
-  ssr.props.userData = response.data;
+  try {
+    const response = await getUserProfile(ssr.props.user.accessToken);
+    ssr.props.userData = response.data;
+  }
+  catch (error) {
+    console.log(error);
+    return { 
+      redirect: { destination: '/server-fejl', permanent: false } 
+    };
+  }
 
   return ssr;
 }

@@ -1,8 +1,8 @@
 import { SessionProvider } from 'next-auth/react';
-import store from '../store/index';
+import store from '/store/index';
 
-import Layout from '../components/layout/Layout';
-import '../styles/globals.css'
+import Layout from '/components/layout/Layout';
+import '/styles/globals.css'
 
 import { Provider } from 'react-redux';
 import { useRouter } from 'next/router';

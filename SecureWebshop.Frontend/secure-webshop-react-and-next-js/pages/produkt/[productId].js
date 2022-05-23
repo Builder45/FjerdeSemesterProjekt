@@ -1,5 +1,5 @@
-import Product from "../../components/products/product-page/Product";
-import { getProduct } from "../../utils/api-service";
+import Product from "/components/products/product-page/Product";
+import { getProduct } from "/utils/api-service";
 
 /* 
   Server-side kode

@@ -1,5 +1,5 @@
-import Card from "../components/ui/containers/Card";
-import LinkText from "../components/ui/LinkText";
+import Card from "/components/ui/containers/Card";
+import LinkText from "/components/ui/LinkText";
 
 export default function Error404Page() {
   return (

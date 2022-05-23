@@ -1,31 +1,66 @@
 import axios from "axios";
+import api from "./api-client";
 
-const ApiUrl = 'http://localhost:5117/api/';
+/* 
+  Auth
+*/
+export const emailExists = async (email) => await api.get('Auth/EmailExists/' + email);
 
-export const emailExists = async (email) => await axios.get(ApiUrl + 'Auth/EmailExists/' + email);
-export const createUser = async (user) => await axios.post(ApiUrl + 'Auth/Signup', { ...user });
+export const createUser = async (user) => await api.post('Auth/Signup', { ...user });
 
-export const getProducts = async () => await axios.get(ApiUrl + 'Products');
-export const getProduct = async (id) => await axios.get(ApiUrl + 'Products/' + id);
+/* 
+  Users
+*/
+export const getUserProfile = async (token) => await api.get('Users/GetProfile', { 
+  headers: { 'Authorization': `Bearer ${token}` }
+});
+
+export const updateUserInfo = async (userInfo) => await api.put('Users/UpdateInformation', {
+  ...userInfo
+});
+
+export const updateUserPassword = async (password) => await api.put('Users/UpdatePassword', {
+  password
+});
+
+/* 
+  Products
+*/
+export const getProducts = async () => await api.get('Products');
+
+export const getProduct = async (id) => await api.get('Products/' + id);
 
 export const getProductsByQuery = async (params) => {
-  let apiRoute = ApiUrl + 'Products?';
+  let apiRoute = 'Products?';
 
   if (params.search) {
     const encodedParams = encodeURIComponent(params.search);
     apiRoute += `search=${encodedParams}&`;
   }
-  console.log(apiRoute);
-  return await axios.get(apiRoute);
+  
+  return await api.get(apiRoute);
 };
 
-export const updateProductReview = async (review, productId, token) => {
-  return await axios.put(ApiUrl + 'Products/' + productId + '/Reviews', 
-    {
-      ...review
-    },
-    {
-      headers: { 'Authorization': `Bearer ${token}` }
-    }
+/* 
+  Reviews
+*/
+export const updateProductReview = async (review, productId) => {
+  return await api.put('Products/' + productId + '/Reviews', 
+    { ...review }
   );
-}
+};
+
+
+/* 
+  Eksterne API-kald
+*/
+export const getCityByPostalCode = async (postalCode) => {
+  try {
+    const response = await axios.get('https://api.dataforsyningen.dk/postnumre/?nr=' + postalCode);
+    return response.data[0] ? response.data[0].navn : "";
+  }
+  catch (error) {
+    console.log(error);
+    return "";
+  }
+};

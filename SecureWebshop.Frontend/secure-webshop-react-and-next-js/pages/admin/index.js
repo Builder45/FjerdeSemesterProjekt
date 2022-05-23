@@ -1,4 +1,4 @@
-import { createRequiredAuth } from "../../utils/ssr";
+import { createRequiredAuth } from "/utils/ssr";
 
 /* 
   Server-side kode

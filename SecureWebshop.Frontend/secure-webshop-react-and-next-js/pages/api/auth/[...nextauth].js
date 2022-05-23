@@ -3,6 +3,8 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import jwt_decode from 'jwt-decode';
 
+const baseURL = process.env.WEBSHOP_API_BASE_URL || 'http://localhost:5117/api/';
+
 function getDecodedToken(accessToken) {
   try {
     const decodedToken = jwt_decode(accessToken);
@@ -15,7 +17,7 @@ function getDecodedToken(accessToken) {
 
 async function refreshAccessToken(tokenObject) {
   try {
-    const tokenResponse = await axios.post("http://localhost:5117/api/" + 'Auth/RefreshToken', {
+    const tokenResponse = await axios.post(baseURL + 'Auth/RefreshToken', {
       userId: tokenObject.userId,
       refreshToken: tokenObject.refreshToken
     });
@@ -48,7 +50,7 @@ const providers = [
     },
     async authorize(credentials) {
       try {
-        const user = await axios.post("http://localhost:5117/api/" + 'Auth/Login', 
+        const user = await axios.post(baseURL + 'Auth/Login', 
           {
             email: credentials.email,
             password: credentials.password
@@ -112,7 +114,7 @@ const events = {
   // Send logout request til backend, når NextAuth logger brugeren af:
   signOut: async ({ token }) => {
     try {
-      await axios.post('http://localhost:5117/api/' + 'Auth/Logout', {}, {
+      await axios.post(baseURL + 'Auth/Logout', {}, {
         headers: {
           'Authorization': `Bearer ${token.accessToken}`
         }

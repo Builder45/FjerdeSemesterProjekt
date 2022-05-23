@@ -17,7 +17,7 @@ namespace SecureWebshop.API.Controllers
             _userService = userService;
         }
 
-        [Authorize(Roles = "User,Admin")]
+        [Authorize]
         [HttpGet("GetProfile")]
         public async Task<IActionResult> GetOwnProfile()
         {
@@ -39,7 +39,7 @@ namespace SecureWebshop.API.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "User,Admin")]
+        [Authorize]
         [HttpPut("UpdateInformation")]
         public async Task<IActionResult> UpdateOwnInformation(UpdateUserInfoRequest request)
         {
@@ -62,7 +62,7 @@ namespace SecureWebshop.API.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "User,Admin")]
+        [Authorize]
         [HttpPut("UpdatePassword")]
         public async Task<IActionResult> UpdateOwnPassword(UpdateUserPasswordRequest request)
         {

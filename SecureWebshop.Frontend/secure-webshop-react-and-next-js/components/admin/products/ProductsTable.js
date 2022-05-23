@@ -10,6 +10,7 @@ export default function ProductsTable({ products }) {
       <td><LinkText href={`/admin/produkter/${product.id}`} text="Redigér"/></td>
     </tr>
   );
+  
   return (
     <table className={classes.table}>
       <thead>

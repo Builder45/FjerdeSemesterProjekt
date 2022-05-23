@@ -1,4 +1,4 @@
-import Card from "../../components/ui/containers/Card";
+import Card from "/components/ui/containers/Card";
 
 export default function UnauthorizedPage() {
   return (

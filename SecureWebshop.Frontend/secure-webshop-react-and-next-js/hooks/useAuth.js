@@ -21,5 +21,5 @@ export default function useAuth() {
     }
   }, [session]);
 
-  return { isAuthenticated, authStatus: status, token: session?.user.accessToken };
+  return { isAuthenticated, authStatus: status };
 }

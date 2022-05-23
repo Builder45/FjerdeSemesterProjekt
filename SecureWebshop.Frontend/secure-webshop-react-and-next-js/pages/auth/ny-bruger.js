@@ -1,13 +1,13 @@
 import { useRouter } from "next/router";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "/hooks/useAuth";
 import { useEffect, useState } from "react";
-import { createUser } from "../../utils/api-service";
-import LoadingSpinner from "../../components/ui/LoadingSpinner";
-import SignupFormEmail from "../../components/auth/signup/SignupFormEmail";
-import SignupFormInformation from "../../components/auth/signup/SignupFormInformation";
-import SignupFormPassword from "../../components/auth/signup/SignupFormPassword";
-import SignupFormError from "../../components/auth/signup/SignupFormError";
-import SignupFormComplete from "../../components/auth/signup/SignupFormComplete";
+import { createUser } from "/utils/api-service";
+import LoadingSpinner from "/components/ui/LoadingSpinner";
+import SignupFormEmail from "/components/auth/signup/SignupFormEmail";
+import SignupFormInformation from "/components/auth/signup/SignupFormInformation";
+import SignupFormPassword from "/components/auth/signup/SignupFormPassword";
+import SignupFormError from "/components/auth/signup/SignupFormError";
+import SignupFormComplete from "/components/auth/signup/SignupFormComplete";
 
 const defaultSignupData = {
   email: "",
