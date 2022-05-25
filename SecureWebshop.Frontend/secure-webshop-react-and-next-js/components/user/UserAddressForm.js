@@ -67,7 +67,14 @@ export default function UserAddressForm({ addresses = [] }) {
           dispatch(uiActions.setNotification(ERROR_MESSAGE));
         }
         else {
-          router.reload();
+          
+          if (router.query.callback) {
+            router.push('/' + router.query.callback);
+          }
+          else {
+            router.reload();
+          }
+
         }
       });
     }

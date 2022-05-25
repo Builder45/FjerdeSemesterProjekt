@@ -1,14 +1,13 @@
-import Checkout from "../components/checkout/Checkout";
-import Card from "../components/ui/containers/Card";
-import { getUserProfile } from "../utils/api-service";
-import { createRequiredAuth } from "../utils/ssr";
+import Checkout from "/components/checkout/Checkout";
+import { getUserProfile } from "/utils/api-service";
+import { createRequiredAuth } from "/utils/ssr";
 
 /* 
   Server-side kode
 */
 export async function getServerSideProps(context) {
 
-  const ssr = await createRequiredAuth({ allowedRoles: ["User", "Admin"] })({ req: context.req });
+  const ssr = await createRequiredAuth({ allowedRoles: ["User", "Admin"], callback: 'checkout' })({ req: context.req });
   if (!ssr.props) return ssr;
 
   try {

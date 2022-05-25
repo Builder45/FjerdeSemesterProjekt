@@ -10,7 +10,7 @@
   margin-bottom: 0.3rem;
 }
 
-.control input, .control textarea {
+.control input, .control textarea, .control select {
   font: inherit;
   border-radius: 4px;
   border: 1px solid white;

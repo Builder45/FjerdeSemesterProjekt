@@ -2,10 +2,10 @@ import { getSession } from "next-auth/react"
 
 // Hjælpefunktion til getServerSideProps, som tager fat i session fra nextauth og returner 
 // et objekt baseret på om der findes en session og om rollerne stemmer overens:
-export function createRequiredAuth({ allowedRoles = [] }) {
+export function createRequiredAuth({ allowedRoles = [], callback = '/' }) {
   return async function ({ req }) {
     const session = await getSession({req: req});
-    
+
     if (session && session.error) {
       return {
         redirect: {
@@ -37,7 +37,7 @@ export function createRequiredAuth({ allowedRoles = [] }) {
     // Hvis der ikke findes en session:
     return {
       redirect: {
-        destination: '/auth/login',
+        destination: '/auth/login?callback=' + callback,
         permanent: false
       }
     };

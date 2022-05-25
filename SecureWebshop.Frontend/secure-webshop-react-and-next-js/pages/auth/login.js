@@ -8,7 +8,8 @@ export default function Login() {
   const router = useRouter();
 
   if (isAuthenticated) {
-    router.push('/');
+    const redirectPath = router.query.callback ? `/${router.query.callback}` : '/';
+    router.push(redirectPath);
   }
 
   if (authStatus === 'loading') {
