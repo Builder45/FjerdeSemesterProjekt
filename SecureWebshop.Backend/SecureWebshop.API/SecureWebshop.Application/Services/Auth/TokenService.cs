@@ -31,14 +31,9 @@ namespace SecureWebshop.Application.Services.Auth
             var salt = HashHelper.GenerateSecureSalt();
             var refreshTokenHashed = HashHelper.HashUsingPbkdf2(refreshToken, salt);
 
-            //if (user.RefreshToken != null)
-            //{
-            //    await RemoveRefreshTokenAsync(user.Id);
-            //}
-
             var newRefreshToken = new RefreshToken
             {
-                ExpiryDate = DateTime.Now.AddMinutes(10),
+                ExpiryDate = DateTime.Now.AddMinutes(60),
                 CreationDate = DateTime.Now,
                 TokenHash = refreshTokenHashed,
                 TokenSalt = Convert.ToBase64String(salt)

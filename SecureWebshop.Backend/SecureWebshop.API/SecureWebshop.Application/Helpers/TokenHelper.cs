@@ -49,7 +49,7 @@ namespace SecureWebshop.Application.Helpers
                 Subject = claimsIdentity,
                 Issuer = _config.GetSection("JWT:Issuer").Value,
                 Audience = _config.GetSection("JWT:Audience").Value,
-                Expires = DateTime.Now.AddMinutes(1),
+                Expires = DateTime.Now.AddMinutes(30),
                 SigningCredentials = credentials
             };
 
