@@ -3,6 +3,7 @@ import axios from "axios";
 const errorBadTypeFormat = "Der er sket en fejl med formattet.";
 const errorBadEmailFormat = "Skriv en gyldig email.";
 const errorBadPhoneNumberFormat = "Skriv et gyldigt telefon nr.";
+const errorBadPostalCodeFormat = "Skriv et gyldigt post nr.";
 const errorWeakPassword = "Dit password opfylder ikke kravene.";
 const errorPasswordMismatch = "Indholdet i begge felter skal matche.";
 const errorEmpty = "Feltet skal udfyldes.";
@@ -130,6 +131,15 @@ export function validatePasswordMatch(password, repeatPassword) {
 }
 
 export function validatePostalCode(postalCode) {
-  if (!postalCode) return { isValid: false, error: "error" };
+  
+  if (!postalCode || postalCode === NaN) {
+    return { isValid: false, error: errorBadPostalCodeFormat };
+  }
+
+  const postalCodeNumber = Number(postalCode);
+  if (postalCodeNumber < 1 || postalCodeNumber > 9999) {
+    return { isValid: false, error: errorBadPostalCodeFormat };
+  }
+
   return { isValid: true};
 }

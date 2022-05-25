@@ -1,0 +1,13 @@
+.userAddresses {
+  width: 50%;
+}
+
+.userAddresses h2 {
+  font-size: var(--size-8);
+  margin-bottom: 1.5rem;
+}
+
+.deleteAddress {
+  cursor: pointer;
+  text-decoration: underline;
+}

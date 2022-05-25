@@ -79,27 +79,14 @@ namespace SecureWebshop.Application.Services.Users
             var user = await _genericUserRepo.Get(request.UserId);
 
             if (user == null)
-            {
-                return new UserUpdatedResponse
-                {
-                    Success = false,
-                    Error = "User doesn't exist"
-                };
-            }
+                return new UserUpdatedResponse { Success = false, Error = "User doesn't exist" };
 
             var passwordIsValid = ValidationHelper.PasswordIsValid(request.Password);
 
             if (!passwordIsValid)
-            {
-                return new UserUpdatedResponse
-                {
-                    Success = false,
-                    Error = "The new password is not valid"
-                };
-            }
+                return new UserUpdatedResponse { Success = false, Error = "The new password is not valid" };
 
-            var passwordHash = HashHelper.HashUsingPbkdf2(request.Password, Convert.FromBase64String(user.PasswordSalt));
-            user.PasswordHash = passwordHash;
+            user.PasswordHash = HashHelper.HashUsingPbkdf2(request.Password, Convert.FromBase64String(user.PasswordSalt));
 
             await _genericUserRepo.CreateOrUpdate(user);
 
@@ -108,7 +95,34 @@ namespace SecureWebshop.Application.Services.Users
 
         public async Task<UserUpdatedResponse> CreateUserAddress(CreateUserAddressRequest request)
         {
-            throw new NotImplementedException();
+            var user = await _genericUserRepo.Get(request.UserId);
+            if (user == null)
+                return new UserUpdatedResponse { Success = false, Error = "User doesn't exist" };
+
+            var duplicateAddress = user.Addresses.FirstOrDefault(address => address.Title == request.Title);
+            if (duplicateAddress != null)
+                return new UserUpdatedResponse { Success = false, Error = "Address with the same title exists" };
+
+            user.Addresses.Add(new Address(request.Title, request.Street, request.PostalCode));
+            await _genericUserRepo.CreateOrUpdate(user);
+
+            return new UserUpdatedResponse { Success = true };
+        }
+
+        public async Task<UserUpdatedResponse> DeleteUserAddress(DeleteUserAddressRequest request)
+        {
+            var user = await _genericUserRepo.Get(request.UserId);
+            if (user == null)
+                return new UserUpdatedResponse { Success = false, Error = "User doesn't exist" };
+
+            var duplicateAddress = user.Addresses.FirstOrDefault(address => address.Title == request.Title);
+            if (duplicateAddress == null)
+                return new UserUpdatedResponse { Success = false, Error = "No address with specified title exists" };
+
+            user.Addresses.Remove(duplicateAddress);
+            await _genericUserRepo.CreateOrUpdate(user);
+
+            return new UserUpdatedResponse { Success = true };
         }
     }
 }

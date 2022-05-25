@@ -1,50 +1,37 @@
-import { useState } from "react";
 import ProductList from "/components/products/product-list/ProductList";
-import LoadingSpinner from "/components/ui/LoadingSpinner";
 import { getProducts, getProductsByQuery } from "/utils/api-service";
 
 /* 
   Server-side kode
 */
 export async function getServerSideProps({ query }) {
-  let initProducts = [];
+  let products = [];
   try {
     if (query.search) {
       const response = await getProductsByQuery({ search: query.search });
       if (response.data) {
-        initProducts = response.data;
+        products = response.data;
       }
     }
     else {
       const response = await getProducts();
       if (response.data) {
-        initProducts = response.data;
+        products = response.data;
       }
     }
   }
   catch {}
 
   return {
-    props: {
-      initProducts,
-      query
-    }
-  }
+    props: { products, query }
+  };
 }
 
 /* 
   Client-side kode
 */
-export default function HomePage({ initProducts, query }) {
-  const [ products, setProducts ] = useState(initProducts);
-
-  if (products === null) return <p className="center">Kunne ikke hente produkter ned...</p>
-  if (products.length === 0 && query?.search) return <p className="center">Søgningen gav ingen resultater.</p>
-  if (products.length === 0) return <LoadingSpinner />
-
+export default function HomePage({ products, query }) {
   return (
-    <section>
-      <ProductList products={products}/>
-    </section>
-  )
+    <ProductList products={products} query={query}/>
+  );
 }

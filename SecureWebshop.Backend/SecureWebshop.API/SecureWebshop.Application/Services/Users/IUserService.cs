@@ -10,5 +10,6 @@ namespace SecureWebshop.Application.Services.Users
         Task<UserUpdatedResponse> UpdateUserInfo(UpdateUserInfoRequest request);
         Task<UserUpdatedResponse> UpdateUserPassword(UpdateUserPasswordRequest request);
         Task<UserUpdatedResponse> CreateUserAddress(CreateUserAddressRequest request);
+        Task<UserUpdatedResponse> DeleteUserAddress(DeleteUserAddressRequest request);
     }
 }

@@ -16,24 +16,26 @@ function getDecodedToken(accessToken) {
 }
 
 async function refreshAccessToken(tokenObject) {
+  console.log(tokenObject.userId, tokenObject.refreshToken);
   try {
     const tokenResponse = await axios.post(baseURL + 'Auth/RefreshToken', {
       userId: tokenObject.userId,
       refreshToken: tokenObject.refreshToken
     });
 
+    console.log(tokenResponse.data.refreshToken);
     const decodedToken = getDecodedToken(tokenResponse.data.accessToken);
 
     return {
       userId: tokenObject.userId,
       accessToken: tokenResponse.data.accessToken,
-      refreshToken: tokenResponse.data.refreshToken,
       accessTokenExpires: decodedToken?.exp ?? Date.now(),
+      refreshToken: tokenResponse.data.refreshToken,
       role: decodedToken?.role
     }
   }
   catch (error) {
-    console.log("error: " + error);
+    console.log("error: " + error, error.message);
     return {
       ...tokenObject,
       error: "ErrorRefreshingAccessToken",
@@ -86,22 +88,28 @@ const callbacks = {
       // Kode køres kun ved login:
       token.userId = user.data.userId;
       token.accessToken = user.data.accessToken;
-      token.refreshToken = user.data.refreshToken;
       token.accessTokenExpires = user.data.decodedToken?.exp ?? Date.now();
+      token.refreshToken = user.data.refreshToken;
       token.role = user.data.decodedToken?.role;
+      console.log(token.refreshToken);
     }
+
+    console.log("jwt callback", token.accessToken.slice(-10));
 
     const currentTime = Date.now();
-    if (currentTime < (token.accessTokenExpires * 1000)) {
-      return token;
+    if (!token.accessToken || currentTime < (token.accessTokenExpires * 1000)) {
+      return Promise.resolve(token);
     }
 
+    token.accessTokenExpires = null;
+    console.log("jwt needs refreshing", token.accessToken.slice(-10));
+
     // Skaf ny token, hvis den gamle er udløbet:
-    console.log("refreshing");
-    return await refreshAccessToken(token);
+    token = await refreshAccessToken(token);
+    console.log("jwt refreshed", token.accessToken.slice(-10));
+    return Promise.resolve(token);
   },
   session: async ({ session, token }) => {
-
     session.user.accessToken = token.accessToken;
     session.user.role = token.role;
     session.error = token.error;

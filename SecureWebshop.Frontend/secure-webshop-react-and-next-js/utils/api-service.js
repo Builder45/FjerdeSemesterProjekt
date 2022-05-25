@@ -23,6 +23,12 @@ export const updateUserPassword = async (password) => await api.put('Users/Updat
   password
 });
 
+export const createUserAddress = async (address) => await api.post('Users/Addresses', {
+  ...address
+});
+
+export const removeUserAddress = async (title) => await api.delete('Users/Addresses/' + title);
+
 /* 
   Products
 */

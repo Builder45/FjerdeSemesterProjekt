@@ -20,3 +20,8 @@
   left: 30%;
   top: 15%;
 }
+
+.noProducts {
+  text-align: center;
+  padding-top: 1.5rem;
+}

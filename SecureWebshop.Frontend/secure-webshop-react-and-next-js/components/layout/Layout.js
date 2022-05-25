@@ -1,3 +1,5 @@
+import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useModal from '../../hooks/useModal';
@@ -38,6 +40,9 @@ export default function Layout({ children }) {
 
   return (
     <>
+      <Head>
+        <title>SikkerWebshop</title>
+      </Head>
       <MainNavbar onToggleCart={modalHandler}/>
       <main>{children}</main>
       <Cart onToggle={modalHandler} visible={modalIsVisible}/>

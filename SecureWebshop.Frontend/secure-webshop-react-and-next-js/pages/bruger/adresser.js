@@ -29,10 +29,13 @@ export async function getServerSideProps(context) {
   Client-side kode
 */
 export default function UserUpdateAddressesPage({ addresses }) {
+
+  //addresses = [{title:"Test",street:"Jordbærvej 12",postalCode:8732}];
+
   return (
     <>
       <UserAddresses addresses={addresses} />
-      <UserAddressForm />
+      <UserAddressForm addresses={addresses}/>
     </>
   );
 }

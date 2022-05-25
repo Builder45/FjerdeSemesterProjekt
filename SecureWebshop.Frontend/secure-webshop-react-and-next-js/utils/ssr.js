@@ -5,7 +5,7 @@ import { getSession } from "next-auth/react"
 export function createRequiredAuth({ allowedRoles = [] }) {
   return async function ({ req }) {
     const session = await getSession({req: req});
-
+    
     if (session && session.error) {
       return {
         redirect: {

@@ -4,7 +4,7 @@ import { cartActions } from '../../../store';
 import classes from './ProductList.module.css';
 import ProductListItem from './ProductListItem';
 
-export default function ProductList({ products = [] }) {
+export default function ProductList({ products = [], query }) {
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -31,11 +31,18 @@ export default function ProductList({ products = [] }) {
       />
   );
 
+  let noProductsMessage;
+  if (products.length === 0) {
+    noProductsMessage = query?.search
+    ? "Søgningen gav ingen resultater"
+    : "Fejl: der blev ikke hentet nogen produkter ned"
+  }
+
   return (
     <section className={classes.outerContainer}>
+      {noProductsMessage && <h2 className={classes.noProducts}>{noProductsMessage}</h2>}
       <div className={classes.gridContainer}>
-        {products && mappedProducts}
-        {products.length === 0 && <p>Ingen produkter</p>}
+        {mappedProducts}
       </div>
     </section>
   );
