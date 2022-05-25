@@ -11,16 +11,16 @@ import LoadingSpinner from '../../ui/LoadingSpinner';
 import SignupForm from './SignupForm';
 import classes from './SignupForm.module.css';
 
+const validations = [
+  { id: "email", method: ({email}) => validateEmail(email) }
+];
+
 export default function SignupFormEmail({ onClickContinue, signupData, onDataChange }) {
-  const [ isProcessing, setIsProcessing ] = useState(false);
   const dispatch = useDispatch();
 
   const initialFormState = { email: signupData.email ? signupData.email : "" };
-  const validations = [
-    { id: "email", method: ({email}) => validateEmail(email) }
-  ];
-
   const { input, isValid, errors, touched, changeHandler, blurHandler } = useForm(initialFormState, validations);
+  const [ isProcessing, setIsProcessing ] = useState(false);
 
   if (isProcessing) return <LoadingSpinner/>;
 

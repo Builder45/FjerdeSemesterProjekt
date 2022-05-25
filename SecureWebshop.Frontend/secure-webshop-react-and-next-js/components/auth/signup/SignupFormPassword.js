@@ -1,22 +1,24 @@
 import Input from '../../ui/forms/Input';
 import Button from '../../ui/Button';
 import SignupForm from './SignupForm';
-import classes from './SignupForm.module.css';
-import { validatePassword, validatePasswordMatch } from '../../../utils/input-validation';
-import useForm from '../../../hooks/useForm';
-import useModal from '../../../hooks/useModal';
-import Modal from '../../ui/modal/Modal';
 import PasswordInfoModal from './PasswordInfoModal';
+
+import classes from './SignupForm.module.css';
+
+import { validatePassword, validatePasswordMatch } from '/utils/input-validation';
+import useForm from '/hooks/useForm';
+import useModal from '/hooks/useModal';
+
+const validations = [
+  { id: "password", method: ({password}) => validatePassword(password) },
+  { id: "repeatPassword", method: ({password, repeatPassword}) => validatePasswordMatch(password, repeatPassword) }
+];
 
 export default function SignupFormInformation({ onClickBack, onDataChange, onClickFinish }) {
 
   const { modalIsVisible, modalHandler, toggleModal } = useModal();
 
   const initialFormState = { password: "", repeatPassword: "" };
-  const validations = [
-    { id: "password", method: ({password}) => validatePassword(password) },
-    { id: "repeatPassword", method: ({password, repeatPassword}) => validatePasswordMatch(password, repeatPassword) }
-  ];
   const { input, isValid, errors, touched, changeHandler, blurHandler } = useForm(initialFormState, validations);
 
   const previousSignupHandler = event => {

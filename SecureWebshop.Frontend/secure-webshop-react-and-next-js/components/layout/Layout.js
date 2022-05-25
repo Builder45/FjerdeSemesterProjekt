@@ -21,17 +21,17 @@ export default function Layout({ children }) {
 
   useEffect(() => {
     dispatch(fetchCartData());
+    initialLoad = false;
   }, [dispatch]);
 
   useEffect(() => {
-    if (initialLoad) {
-      initialLoad = false;
-      return;
-    }
-
-    if (cart.changed) {
+    if (initialLoad) return;
+    
+    const timer = setTimeout(() => {
       dispatch(saveCartData(cart));
-    }
+    }, 1000);
+
+    return () => clearTimeout(timer);
   }, [cart, dispatch]);
 
   const notificationHandler = () => {

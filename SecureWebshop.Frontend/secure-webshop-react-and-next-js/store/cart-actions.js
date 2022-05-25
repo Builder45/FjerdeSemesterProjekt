@@ -14,7 +14,8 @@ export const fetchCartData = () => {
 };
 
 export const saveCartData = cart => {
-  return async () => {
+  return dispatch => {
     localStorage.setItem('cartData', JSON.stringify(cart));
+    //dispatch(cartActions.setChangedFalse());
   }
 }

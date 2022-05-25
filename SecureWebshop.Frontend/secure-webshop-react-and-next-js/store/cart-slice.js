@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   items: [],
   totalQuantity: 0,
-  changed: false
+  //changed: false
 };
 
 const cartSlice = createSlice({
@@ -16,11 +16,15 @@ const cartSlice = createSlice({
       state.items = action.payload.items;
     },
 
+    //setChangedFalse(state) {
+    //  state.changed = false;
+    //},
+
     addItem(state, action) {
       const newItem = action.payload;
       const existingItem = state.items.find(item => item.id === newItem.id);
       state.totalQuantity++;
-      state.changed = true;
+      //state.changed = true;
 
       if (!existingItem) {
         state.items.push({
@@ -41,7 +45,7 @@ const cartSlice = createSlice({
       const id = action.payload;
       const existingItem = state.items.find(item => item.id === id);
       state.totalQuantity--;
-      state.changed = true;
+      //state.changed = true;
       if (existingItem.quantity > 1) {
         existingItem.quantity--;
         existingItem.total -= existingItem.price;

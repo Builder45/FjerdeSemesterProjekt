@@ -1,9 +1,15 @@
-import useForm from '../../../hooks/useForm';
-import { validatePhoneNumber, validateText } from '../../../utils/input-validation';
+import useForm from '/hooks/useForm';
+import { validatePhoneNumber, validateText } from '/utils/input-validation';
 import Input from '../../ui/forms/Input';
 import Button from '../../ui/Button';
 import SignupForm from './SignupForm';
 import classes from './SignupForm.module.css';
+
+const validations = [
+  { id: "firstName", method: ({firstName}) => validateText(firstName, 1, 50) },
+  { id: "lastName", method: ({lastName}) => validateText(lastName, 1, 100) },
+  { id: "phoneNumber", method: ({phoneNumber}) => validatePhoneNumber(phoneNumber) }
+];
 
 export default function SignupFormInformation({ onClickContinue, onClickBack, onDataChange, signupData }) {
 
@@ -12,11 +18,6 @@ export default function SignupFormInformation({ onClickContinue, onClickBack, on
     lastName: signupData.lastName ? signupData.lastName : "",
     phoneNumber: signupData.phoneNumber ? signupData.phoneNumber : ""
   };
-  const validations = [
-    { id: "firstName", method: ({firstName}) => validateText(firstName, 1, 50) },
-    { id: "lastName", method: ({lastName}) => validateText(lastName, 1, 100) },
-    { id: "phoneNumber", method: ({phoneNumber}) => validatePhoneNumber(phoneNumber) }
-  ];
   const { input, isValid, errors, touched, changeHandler, blurHandler } = useForm(initialFormState, validations);
 
   const continueSignupHandler = event => {
