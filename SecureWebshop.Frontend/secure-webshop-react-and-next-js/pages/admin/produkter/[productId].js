@@ -1,3 +1,5 @@
+import ProductEditor from "../../../components/admin/products/ProductEditor";
+import ProductForm from "../../../components/admin/products/ProductForm";
 import ProductDetails from "/components/products/product-page/ProductDetails";
 import Card from "/components/ui/containers/Card";
 import { getProduct } from "/utils/api-service";
@@ -15,7 +17,7 @@ export async function getServerSideProps({ query, req }) {
   try {
     const response = await getProduct(query.productId);
     if (response.data) {
-      product = response.data;
+      product = response.data.product;
     }
   }
   catch {}
@@ -30,13 +32,6 @@ export async function getServerSideProps({ query, req }) {
 */
 export default function AdminEditProductPage({ product }) {
   return (
-    <>
-      <Card></Card>
-      <Card>
-        <p>Eksempelvisning</p>
-        <ProductDetails product={product}/>
-      </Card>
-      
-    </>
+    <ProductEditor product={product} />
   )
 }

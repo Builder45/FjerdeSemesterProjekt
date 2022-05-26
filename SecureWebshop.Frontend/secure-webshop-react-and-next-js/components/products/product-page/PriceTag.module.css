@@ -1,0 +1,11 @@
+.priceContainer {
+  max-height: 32px;
+  width: auto;
+  display: flex;
+  align-items: center;
+}
+
+.outdatedPrice {
+  padding-left: 1rem;
+  text-decoration: line-through;
+}

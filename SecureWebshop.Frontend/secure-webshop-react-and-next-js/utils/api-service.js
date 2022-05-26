@@ -34,6 +34,10 @@ export const removeUserAddress = async (title) => await api.delete('Users/Addres
 */
 export const getProducts = async () => await api.get('Products');
 
+export const getProductsFull = async (token) => await api.get('Products/Full', { 
+  headers: { 'Authorization': `Bearer ${token}` }
+});
+
 export const getProduct = async (id) => await api.get('Products/' + id);
 
 export const getProductsByQuery = async (params) => {
@@ -46,6 +50,10 @@ export const getProductsByQuery = async (params) => {
   
   return await api.get(apiRoute);
 };
+
+export const updateProduct = async (product) => await api.put('Products', {
+  ...product
+})
 
 /* 
   Reviews

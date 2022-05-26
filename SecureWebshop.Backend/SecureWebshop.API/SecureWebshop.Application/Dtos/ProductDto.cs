@@ -12,8 +12,7 @@ namespace SecureWebshop.Application.Dtos
         public double Rating { get; set; }
         public int TotalReviews { get; set; }
         public string ImageUrl { get; set; }
-        public string ThumbnailUrl { get; set; }
-        public string Status { get; set; }
+        public string Status { get; set; } = "Inaktiv";
         public List<ProductReviewDto> Reviews { get; set; } = new List<ProductReviewDto>();
 
         public void Map(Product product)
@@ -26,7 +25,6 @@ namespace SecureWebshop.Application.Dtos
             Rating = product.Rating;
             TotalReviews = product.TotalReviews;
             ImageUrl = product.ImageUrl;
-            ThumbnailUrl = product.ThumbnailUrl;
             Status = product.Status;
 
             if (product.Reviews == null)

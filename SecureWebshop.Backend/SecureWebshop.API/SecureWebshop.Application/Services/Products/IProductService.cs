@@ -6,7 +6,7 @@ namespace SecureWebshop.Application.Services.Products
 {
     public interface IProductService
     {
-        Task<ProductsResponse> GetProductsAsync(QueryRequest queryRequest);
+        Task<ProductsResponse> GetProductsAsync(QueryRequest queryRequest, bool includeAll = false);
         Task<ProductResponse> GetProductAsync(string productId);
         Task<UpdateProductResponse> CreateProductAsync(UpdateProductRequest updateProductRequest);
         Task<UpdateProductResponse> UpdateProductAsync(UpdateProductRequest updateProductRequest);

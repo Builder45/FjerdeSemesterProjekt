@@ -10,13 +10,13 @@ export async function getServerSideProps({ query }) {
     if (query.search) {
       const response = await getProductsByQuery({ search: query.search });
       if (response.data) {
-        products = response.data;
+        products = response.data.products;
       }
     }
     else {
       const response = await getProducts();
       if (response.data) {
-        products = response.data;
+        products = response.data.products;
       }
     }
   }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SecureWebshop.Application.Requests;
 using SecureWebshop.Application.Requests.Products;
@@ -25,74 +24,60 @@ namespace SecureWebshop.API.Controllers
         {
             var response = await _productService.GetProductAsync(productId);
 
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
-
-            return Ok(response.Product);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
         // GET => URL/api/Products?pageSize=10&pageNumber=1&search=searchTerm
         [AllowAnonymous]
         [HttpGet()]
-        public async Task<IActionResult> GetProducts([FromQuery] QueryRequest queryRequest)
+        public async Task<IActionResult> GetProducts([FromQuery] QueryRequest request)
         {
-            var response = await _productService.GetProductsAsync(queryRequest);
+            var response = await _productService.GetProductsAsync(request);
 
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
 
-            return Ok(response.Products);
+        // GET => URL/api/Products?pageSize=10&pageNumber=1&search=searchTerm
+        [AllowAnonymous]
+        [HttpGet("Full")]
+        public async Task<IActionResult> GetProductsFull([FromQuery] QueryRequest request)
+        {
+            var response = await _productService.GetProductsAsync(request, true);
+
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
         // POST => URL/api/Products
         [Authorize(Roles = "Admin")]
         [HttpPost()]
-        public async Task<IActionResult> CreateProduct(UpdateProductRequest updateProductRequest)
+        public async Task<IActionResult> CreateProduct(UpdateProductRequest request)
         {
-            var response = await _productService.CreateProductAsync(updateProductRequest);
+            var response = await _productService.CreateProductAsync(request);
 
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
-
-            return Ok();
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
         // PUT => URL/api/Products
         [Authorize(Roles = "Admin")]
         [HttpPut()]
-        public async Task<IActionResult> UpdateProduct(UpdateProductRequest updateProductRequest)
+        public async Task<IActionResult> UpdateProduct(UpdateProductRequest request)
         {
-            var response = await _productService.UpdateProductAsync(updateProductRequest);
+            var response = await _productService.UpdateProductAsync(request);
 
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
-
-            return Ok();
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
-        // DELETE => URL/api/Products
+        // DELETE => URL/api/Products/{productId}
         [Authorize(Roles = "Admin")]
         [HttpDelete("{productId}")]
         public async Task<IActionResult> DeleteProduct([FromRoute] string productId)
         {
             var response = await _productService.DeleteProductAsync(productId);
 
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
-
-            return Ok();
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
+        // PUT => URL/api/Products/{productId}/Reviews
         [Authorize]
         [HttpPut("{productId}/Reviews")]
         public async Task<IActionResult> UpdateProductReview([FromRoute] string productId, [FromBody] UpdateProductReviewsRequest request)
@@ -102,12 +87,7 @@ namespace SecureWebshop.API.Controllers
 
             var response = await _productService.UpdateProductReviewsAsync(request);
 
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
-
-            return Ok();
+            return response.Success ? Ok(response) : BadRequest(response);
         }
     }
 }

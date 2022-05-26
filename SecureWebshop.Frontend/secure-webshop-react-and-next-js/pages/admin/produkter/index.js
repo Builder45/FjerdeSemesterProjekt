@@ -1,6 +1,6 @@
+import { getProductsFull } from "/utils/api-service";
 import ProductsTable from "/components/admin/products/ProductsTable";
 import Card from "/components/ui/containers/Card";
-import { getProducts } from "/utils/api-service";
 import { createRequiredAuth } from "/utils/ssr";
 
 /* 
@@ -13,9 +13,9 @@ export async function getServerSideProps(context) {
 
   let products = [];
   try {
-    const response = await getProducts();
+    const response = await getProductsFull(ssr.props.user.accessToken);
     if (response.data) {
-      products = response.data;
+      products = response.data.products;
     }
   }
   catch {}

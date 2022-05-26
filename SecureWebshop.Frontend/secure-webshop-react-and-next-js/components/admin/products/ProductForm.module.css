@@ -1,0 +1,22 @@
+.form {
+  display: flex;
+}
+
+.formDivision {
+  width: 50%;
+}
+
+.form input, .form textarea {
+  width: 80%;
+}
+
+.priceInputs {
+  width: 85%;
+  display: flex;
+  margin: auto;
+  justify-content: space-between;
+}
+
+.priceInputs input {
+  width: 90%;
+}

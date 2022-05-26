@@ -40,12 +40,16 @@
   cursor: pointer;
 }
 
-.infoName, .infoPrice {
+.infoName {
   font-size: var(--size-5);
   margin: 0.3rem 0.3rem;
 }
 
-.infoRating {
+.infoPrice {
+  font-size: var(--size-5);
+}
+
+.infoRating, .infoPrice {
   margin: 0.3rem auto;
 }
 

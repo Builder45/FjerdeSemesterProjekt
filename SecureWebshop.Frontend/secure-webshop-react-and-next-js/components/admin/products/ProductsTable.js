@@ -1,5 +1,7 @@
 import LinkText from "../../ui/LinkText";
-import classes from './ProductsTable.module.css';
+import Table from "../../ui/table/Table";
+
+const tableHeaders = [ "Produktnavn", "Status", "" ];
 
 export default function ProductsTable({ products }) {
 
@@ -7,22 +9,16 @@ export default function ProductsTable({ products }) {
     <tr key={product.id}>
       <td>{product.name}</td>
       <td>{product.status}</td>
-      <td><LinkText href={`/admin/produkter/${product.id}`} text="Redigér"/></td>
+      <td>
+        <LinkText href={`/admin/produkter/${product.id}`} text="Redigér"/>
+        <LinkText href={`/admin/produkter/${product.id}`} text={product.status === 'Aktiv' ? 'Deaktivér' : 'Aktivér'}/>
+      </td>
     </tr>
   );
   
   return (
-    <table className={classes.table}>
-      <thead>
-        <tr>
-          <th>Produktnavn</th>
-          <th>Status</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {productRows}
-      </tbody>
-    </table>
+    <Table tableHeaders={tableHeaders}>
+      {productRows}
+    </Table>
   );
 }

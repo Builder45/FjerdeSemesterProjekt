@@ -5,13 +5,14 @@
         public string Id { get; set; } = string.Empty;
         public string Name { get; set; }
         public string Description { get; set; }
+        public int Amount { get; set; } = 50;
+        public int AmountFrozen { get; set; } = 0;
         public double Price { get; set; }
         public double PriceReduction { get; set; } = 0;
         public double Rating { get; set; } = 0;
         public int TotalReviews { get; set; } = 0;
         public string ImageUrl { get; set; }
-        public string ThumbnailUrl { get; set; }
-        public string Status { get; set; } = "Hidden"; // Hidden || Active || Inactive || Future 
+        public string Status { get; set; } = "Inaktiv"; // Aktiv || Inaktiv
         public List<ProductReview> Reviews { get; set; } = new List<ProductReview>();
 
         public void AddReview(ProductReview newReview)

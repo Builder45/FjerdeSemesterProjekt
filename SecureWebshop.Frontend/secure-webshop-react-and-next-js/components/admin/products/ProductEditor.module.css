@@ -1,0 +1,18 @@
+.card {
+  width: 60%;
+}
+
+.container {
+  width: 60%;
+  min-height: 20rem;
+  margin: 1rem auto;
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  box-shadow: var(--shadow);
+}
+
+.exampleText {
+  text-align: center;
+  font-size: var(--size-5);
+  margin-top: -1rem;
+}

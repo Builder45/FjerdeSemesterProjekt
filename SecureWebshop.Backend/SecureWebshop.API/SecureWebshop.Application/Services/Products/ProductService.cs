@@ -4,7 +4,6 @@ using SecureWebshop.Application.Requests;
 using SecureWebshop.Application.Requests.Products;
 using SecureWebshop.Application.Responses.Products;
 using SecureWebshop.Domain.Entities;
-using System.Globalization;
 
 namespace SecureWebshop.Application.Services.Products
 {
@@ -17,35 +16,43 @@ namespace SecureWebshop.Application.Services.Products
             _genericProductRepo = genericProductRepo;
         }
 
-        public async Task<UpdateProductResponse> CreateProductAsync(UpdateProductRequest updateProductRequest)
+        public async Task<UpdateProductResponse> CreateProductAsync(UpdateProductRequest request)
         {
             var newProduct = new Product
             {
-                Name = updateProductRequest.Name,
-                Description = updateProductRequest.Description,
-                Price = updateProductRequest.Price,
-                ImageUrl = updateProductRequest.ImageUrl,
-                ThumbnailUrl = updateProductRequest.ThumbnailUrl
+                Name = request.Name,
+                Description = request.Description,
+                Price = request.Price,
+                ImageUrl = request.ImageUrl
             };
 
             await _genericProductRepo.CreateOrUpdate(newProduct);
-
             return new UpdateProductResponse { Success = true };
         }
 
-        public async Task<ProductsResponse> GetProductsAsync(QueryRequest queryRequest)
+        public async Task<ProductsResponse> GetProductsAsync(QueryRequest request, bool includeAll = false)
         {
             IEnumerable<Product> products;
 
-            if (String.IsNullOrWhiteSpace(queryRequest.Search))
+            if (includeAll)
             {
-                products = await _genericProductRepo.GetAll(queryRequest.PageSize, queryRequest.PageNumber);
+                products = await _genericProductRepo.GetAll(request.PageSize, request.PageNumber);
             }
             else
             {
-                products = await _genericProductRepo.GetAllByCondition(queryRequest.PageSize, queryRequest.PageNumber, 
-                    product => product.Name.Contains(queryRequest.Search, StringComparison.CurrentCultureIgnoreCase)
-                );
+                if (String.IsNullOrWhiteSpace(request.Search))
+                {
+                    products = await _genericProductRepo.GetAllByCondition(request.PageSize, request.PageNumber, product =>
+                        product.Status == "Aktiv"
+                    );
+                }
+                else
+                {
+                    products = await _genericProductRepo.GetAllByCondition(request.PageSize, request.PageNumber, product =>
+                        product.Status == "Aktiv" &&
+                        product.Name.Contains(request.Search, StringComparison.CurrentCultureIgnoreCase)
+                    );
+                }
             }
             
             var productDtos = new List<ProductDto>();
@@ -57,11 +64,7 @@ namespace SecureWebshop.Application.Services.Products
                 productDtos.Add(productDto);
             }
 
-            return new ProductsResponse
-            {
-                Success = true,
-                Products = productDtos
-            };
+            return new ProductsResponse { Success = true, Products = productDtos };
         }
 
         public async Task<ProductResponse> GetProductAsync(string productId)
@@ -69,66 +72,60 @@ namespace SecureWebshop.Application.Services.Products
             var product = await _genericProductRepo.Get(productId);
 
             if (product == null)
-            {
                 return new ProductResponse { Success = false, Error = "Invalid product ID" };
-            }
 
             var productDto = new ProductDto();
             productDto.Map(product);
 
-            return new ProductResponse
-            {
-                Success = true,
-                Product = productDto
-            };
+            return new ProductResponse { Success = true, Product = productDto };
         }
 
         public async Task<UpdateProductResponse> UpdateProductAsync(UpdateProductRequest request)
         {
-            var newProduct = new Product
-            {
-                Id = request.Id,
-                Name = request.Name,
-                Description = request.Description,
-                Price = request.Price,
-                PriceReduction = request.PriceReduction,
-                ImageUrl = request.ImageUrl,
-                ThumbnailUrl = request.ThumbnailUrl,
-                Status = request.Status
-            };
+            var product = await _genericProductRepo.Get(request.Id);
 
-            await _genericProductRepo.CreateOrUpdate(newProduct);
+            if (product == null)
+                return new UpdateProductResponse { Success = false, Error = "Invalid product ID" };
 
+            product.Id = request.Id;
+            product.Name = request.Name;
+            product.Description = request.Description;
+            product.Price = request.Price;
+            product.PriceReduction = request.PriceReduction;
+            product.ImageUrl = request.ImageUrl;
+
+            await _genericProductRepo.CreateOrUpdate(product);
             return new UpdateProductResponse { Success = true };
         }
 
         public async Task<UpdateProductResponse> DeleteProductAsync(string productId)
         {
             await _genericProductRepo.Delete(productId);
-
             return new UpdateProductResponse { Success = true };
         }
 
         public async Task<UpdateProductResponse> DeactivateProductAsync(string productId)
         {
-            // await _productRepo.Deactivate(productId);
+            var product = await _genericProductRepo.Get(productId);
 
+            if (product == null)
+                return new UpdateProductResponse { Success = false, Error = "Invalid product ID" };
+
+            product.Status = "Inaktiv";
+
+            await _genericProductRepo.CreateOrUpdate(product);
             return new UpdateProductResponse { Success = true };
         }
 
         public async Task<UpdateProductResponse> UpdateProductReviewsAsync(UpdateProductReviewsRequest request)
         {
             if (request.UserId == null)
-            {
                 return new UpdateProductResponse { Success = false, Error = "Authorized User Id required" };
-            }
 
             var product = await _genericProductRepo.Get(request.ProductId);
 
             if (product == null)
-            {
                 return new UpdateProductResponse { Success = false, Error = "Invalid product ID" };
-            }
 
             var newReview = new ProductReview
             {
