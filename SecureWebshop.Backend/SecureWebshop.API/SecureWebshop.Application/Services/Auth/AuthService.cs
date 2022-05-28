@@ -28,7 +28,7 @@ namespace SecureWebshop.Application.Services.Auth
                 return response;
             }
 
-            var requestPasswordHash = HashHelper.HashUsingPbkdf2(request.Password, Convert.FromBase64String(user.PasswordSalt));
+            var requestPasswordHash = HashHelper.HashUsingArgon(request.Password, Convert.FromBase64String(user.PasswordSalt));
             
             if (user.PasswordHash != requestPasswordHash)
             {
@@ -92,7 +92,7 @@ namespace SecureWebshop.Application.Services.Auth
             }
 
             var salt = HashHelper.GenerateSecureSalt();
-            var passwordHash = HashHelper.HashUsingPbkdf2(request.Password, salt);
+            var passwordHash = HashHelper.HashUsingArgon(request.Password, salt);
 
             var user = new User
             {

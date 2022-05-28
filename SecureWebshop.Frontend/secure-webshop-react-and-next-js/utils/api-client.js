@@ -20,7 +20,9 @@ const ApiClient = () => {
       return response;
     },
     (error) => {
-      //console.log(`error`, error);
+      if (error.response.status === 429) {
+        document.location.href = '/server-fejl';
+      }
     },
   );
 

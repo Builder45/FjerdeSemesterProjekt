@@ -10,6 +10,7 @@ using SecureWebshop.Application.Services.Auth;
 using SecureWebshop.Application.Services.Users;
 using SecureWebshop.Application.Services.Products;
 using SecureWebshop.Application.Services.Orders;
+using AspNetCoreRateLimit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,6 +68,39 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
+
+builder.Services.AddMemoryCache();
+builder.Services.Configure<IpRateLimitOptions>(options =>
+{
+    options.EnableEndpointRateLimiting = true;
+    options.StackBlockedRequests = true;
+    options.HttpStatusCode = 429;
+    options.RealIpHeader = "X-Real-IP";
+    options.ClientIdHeader = "X-ClinetId";
+    options.GeneralRules = new List<RateLimitRule>
+    {
+        new RateLimitRule
+        {
+            Endpoint = "*:/api/Auth/*",
+            Period = "60s",
+            Limit = 10
+        },
+        new RateLimitRule
+        {
+            Endpoint = "*:/api/*",
+            Period = "60s",
+            Limit = 30
+        }
+    };
+});
+
+builder.Services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+builder.Services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+builder.Services.AddInMemoryRateLimiting();
+
+
 builder.Services.AddSingleton<IRavenDbContext, RavenDbContext>();
 builder.Services.AddSingleton(typeof(IGenericRepo<>), typeof(GenericRepo<>));
 
@@ -102,5 +136,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseIpRateLimiting();
 
 app.Run();

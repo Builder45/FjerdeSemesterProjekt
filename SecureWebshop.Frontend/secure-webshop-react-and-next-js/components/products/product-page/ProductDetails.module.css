@@ -5,6 +5,7 @@
 }
 
 .image {
+  position: relative;
   width: 50%;
   padding: 1rem;
 }
@@ -50,4 +51,20 @@
   position: absolute;
   bottom: 1rem;
   right: 1rem;
+}
+
+.saleTag {
+  position: absolute;
+  z-index: 100;
+  width: 3rem;
+  height: 2rem;
+  left: 1.4rem;
+  top: 1.4rem;
+  border-radius: 10px;
+  background-color: var(--color-alert);
+  color: black;
+  font-style: italic;
+  font-size: var(--size-5);
+  text-align: center;
+  padding-top: 0.25rem;
 }

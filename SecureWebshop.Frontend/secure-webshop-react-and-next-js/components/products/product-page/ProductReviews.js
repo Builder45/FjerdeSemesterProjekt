@@ -1,5 +1,6 @@
 import useAuth from '../../../hooks/useAuth';
 import ProductReviewItem from './ProductReviewItem';
+import UnsafeProductReviewItem from './UnsafeProductReviewItem';
 import classes from './ProductReviews.module.css';
 import ReviewForm from './ReviewForm';
 

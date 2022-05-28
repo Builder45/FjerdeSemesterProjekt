@@ -8,6 +8,7 @@
   --color-main: #EDE6DB;
   --color-primary: #1A3C40;
   --color-secondary: #417D7A;
+  --color-alert: #fffb00;
   --color-text: hsl(265, 55%, 96%);
   --color-text-hover: hsl(266, 8%, 83%);
   --color-text-disabled: rgb(175, 175, 175);
