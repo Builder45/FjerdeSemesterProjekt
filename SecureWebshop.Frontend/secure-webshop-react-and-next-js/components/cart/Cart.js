@@ -11,6 +11,7 @@ export default function Cart({ onToggle, visible }) {
   const router = useRouter();
   const cartItems = useSelector(state => state.cart.items);
   const cartQuantity = useSelector(state => state.cart.totalQuantity);
+  const cartTotal = cartItems.reduce((prevTotal, cartItem) => prevTotal + cartItem.total, 0);
 
   const addToCartHandler = item => {
     dispatch(cartActions.addItem({
@@ -45,8 +46,11 @@ export default function Cart({ onToggle, visible }) {
           : <p>Din kurv er tom!</p>
         }
       </ul>
-      {cartItemElements.length > 0 && 
-        <Button onClick={redirectHandler}>Gå til kassen</Button>
+      {cartQuantity > 0 && 
+        <div className={classes.cartFooter}>
+          <p>{cartTotal.toFixed(2).replace('.', ',')} kr</p>
+          <Button className={classes.proceedButton} onClick={redirectHandler}>Gå til kassen</Button>
+        </div>
       }
     </Modal>
   );

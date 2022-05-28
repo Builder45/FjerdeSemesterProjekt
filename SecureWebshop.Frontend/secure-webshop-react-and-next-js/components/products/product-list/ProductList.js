@@ -17,7 +17,8 @@ export default function ProductList({ products = [], query }) {
     dispatch(cartActions.addItem({
       id: product.id,
       name: product.name,
-      price: product.price
+      price: product.price,
+      priceReduction: product.priceReduction
     }));
   }
 

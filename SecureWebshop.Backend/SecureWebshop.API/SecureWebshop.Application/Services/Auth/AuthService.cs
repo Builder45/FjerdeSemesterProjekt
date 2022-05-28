@@ -9,20 +9,18 @@ namespace SecureWebshop.Application.Services.Auth
     public class AuthService : IAuthService
     {
         private readonly IGenericRepo<User> _genericUserRepo;
-        private readonly IUserRepo _userRepo;
         private readonly ITokenService _tokenService;
-        public AuthService(IGenericRepo<User> genericUserRepo, IUserRepo userRepo, ITokenService tokenService)
+        public AuthService(IGenericRepo<User> genericUserRepo, ITokenService tokenService)
         {
             _genericUserRepo = genericUserRepo;
-            _userRepo = userRepo;
             _tokenService = tokenService;
         }
 
-        public async Task<TokenResponse> LoginAsync(LoginRequest loginRequest)
+        public async Task<TokenResponse> LoginAsync(LoginRequest request)
         {
             var response = new TokenResponse() { Success = false };
 
-            var user = await _userRepo.GetActiveUserByEmail(loginRequest.Email);
+            var user = await _genericUserRepo.GetByCondition(user => user.Email == request.Email && user.IsActive == true);
 
             if (user == null)
             {
@@ -30,7 +28,7 @@ namespace SecureWebshop.Application.Services.Auth
                 return response;
             }
 
-            var requestPasswordHash = HashHelper.HashUsingPbkdf2(loginRequest.Password, Convert.FromBase64String(user.PasswordSalt));
+            var requestPasswordHash = HashHelper.HashUsingPbkdf2(request.Password, Convert.FromBase64String(user.PasswordSalt));
             
             if (user.PasswordHash != requestPasswordHash)
             {
@@ -69,41 +67,41 @@ namespace SecureWebshop.Application.Services.Auth
             }
         }
 
-        public async Task<SignupResponse> SignupAsync(SignupRequest signupRequest)
+        public async Task<SignupResponse> SignupAsync(SignupRequest request)
         {
             var response = new SignupResponse { Success = false };
 
-            if (!ValidationHelper.EmailIsValid(signupRequest.Email))
+            if (!ValidationHelper.EmailIsValid(request.Email))
             {
                 response.Error = "Email is invalid";
                 return response;
             }
 
-            // Hvis brugeren eksist
-            var existingUser = await _userRepo.GetByEmail(signupRequest.Email);
+            // Hvis brugeren eksister
+            var existingUser = await _genericUserRepo.GetByCondition(user => user.Email == request.Email);
             if (existingUser != null)
             {
                 response.Error = "User with the same email already exists!";
                 return response;
             }
 
-            if (!ValidationHelper.PasswordIsValid(signupRequest.Password))
+            if (!ValidationHelper.PasswordIsValid(request.Password))
             {
                 response.Error = "Password is not strong enough";
                 return response;
             }
 
             var salt = HashHelper.GenerateSecureSalt();
-            var passwordHash = HashHelper.HashUsingPbkdf2(signupRequest.Password, salt);
+            var passwordHash = HashHelper.HashUsingPbkdf2(request.Password, salt);
 
             var user = new User
             {
-                Email = signupRequest.Email,
+                Email = request.Email,
                 PasswordHash = passwordHash,
                 PasswordSalt = Convert.ToBase64String(salt),
-                FirstName = signupRequest.FirstName,
-                LastName = signupRequest.LastName,
-                PhoneNumber = signupRequest.PhoneNumber,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                PhoneNumber = request.PhoneNumber,
                 CreationDate = DateTime.Now,
                 IsActive = true
             };

@@ -9,17 +9,15 @@ namespace SecureWebshop.Application.Services.Users
     public class UserService : IUserService
     {
         private readonly IGenericRepo<User> _genericUserRepo;
-        private readonly IUserRepo _userRepo;
 
-        public UserService(IGenericRepo<User> genericUserRepo, IUserRepo userRepo)
+        public UserService(IGenericRepo<User> genericUserRepo)
         {
             _genericUserRepo = genericUserRepo;
-            _userRepo = userRepo;
         }
 
         public async Task<bool> EmailExists(string email)
         {
-            var user = await _userRepo.GetByEmail(email);
+            var user = await _genericUserRepo.GetByCondition(user => user.Email == email);
             return user != null;
         }
 

@@ -6,7 +6,7 @@ import { emailExists } from '../../../utils/api-service';
 import { validateEmail } from '../../../utils/input-validation';
 import Button from '../../ui/Button';
 import Input from '../../ui/forms/Input';
-import LinkText from '../../ui/LinkText';
+import LinkText from '../../ui/text/LinkText';
 import LoadingSpinner from '../../ui/LoadingSpinner';
 import SignupForm from './SignupForm';
 import classes from './SignupForm.module.css';

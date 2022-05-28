@@ -1,5 +1,5 @@
 import Card from "/components/ui/containers/Card";
-import LinkText from "/components/ui/LinkText";
+import LinkText from "/components/ui/text/LinkText";
 import { createRequiredAuth } from "/utils/ssr";
 import { getUserProfile } from "/utils/api-service";
 

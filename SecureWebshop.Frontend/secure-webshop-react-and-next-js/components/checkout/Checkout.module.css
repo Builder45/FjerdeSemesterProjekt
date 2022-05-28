@@ -1,6 +1,15 @@
+.checkout {
+  width: 50%;
+}
+
 .form {
-  width: 30%;
+  width: 50%;
   margin: auto;
+}
+
+.form button {
+  display: block;
+  margin: 1.5rem auto;
 }
 
 .title {

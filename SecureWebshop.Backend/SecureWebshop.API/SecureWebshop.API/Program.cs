@@ -9,6 +9,7 @@ using SecureWebshop.Application.Helpers;
 using SecureWebshop.Application.Services.Auth;
 using SecureWebshop.Application.Services.Users;
 using SecureWebshop.Application.Services.Products;
+using SecureWebshop.Application.Services.Orders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,7 +69,6 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddSingleton<IRavenDbContext, RavenDbContext>();
 builder.Services.AddSingleton(typeof(IGenericRepo<>), typeof(GenericRepo<>));
-builder.Services.AddSingleton(typeof(IUserRepo), typeof(UserRepo));
 
 builder.Services.AddSingleton(typeof(ITokenHelper), typeof(TokenHelper));
 
@@ -76,6 +76,7 @@ builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<IOrderService, OrderService>();
 
 // Kobling mellem appsettings og persistence-laget, så der kan forbindes til RavenDB
 builder.Services.Configure<PersistenceSettings>(builder.Configuration.GetSection("RavenDB"));

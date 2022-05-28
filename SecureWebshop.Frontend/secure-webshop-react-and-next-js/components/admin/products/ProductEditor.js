@@ -6,7 +6,7 @@ import ProductForm from "./ProductForm";
 import classes from './ProductEditor.module.css';
 import Product from "../../products/product-page/Product";
 
-export default function ProductEditor({ product }) {
+export default function ProductEditor({ product = {} }) {
   const { id, name, description, price, priceReduction, imageUrl } = product;
   const initialFormState = { 
     id, name, description, price, priceReduction, imageUrl, rating: 2.5, totalReviews: 100

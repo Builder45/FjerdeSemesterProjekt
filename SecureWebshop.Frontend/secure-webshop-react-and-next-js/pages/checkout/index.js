@@ -26,7 +26,7 @@ export async function getServerSideProps(context) {
 /* 
   Client-side kode
 */
-export default function UserUpdateAddressesPage({ userData }) {
+export default function CheckoutPage({ userData }) {
   return (
     <Checkout userData={userData} />
   );

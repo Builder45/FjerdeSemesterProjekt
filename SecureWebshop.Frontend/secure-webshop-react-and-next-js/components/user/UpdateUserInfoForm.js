@@ -11,7 +11,7 @@ import { uiActions } from "../../store";
 import { useState } from "react";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import { useRouter } from "next/router";
-import LinkText from "../ui/LinkText";
+import LinkText from "../ui/text/LinkText";
 
 const ERROR_MESSAGE = "Fejl: Dine oplysninger blev ikke opdateret!";
 const SUCCESS_MESSAGE = "Succes! Dine oplysninger er blevet ændret!";

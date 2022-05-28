@@ -2,6 +2,7 @@
 using SecureWebshop.Application.Repositories;
 using SecureWebshop.Persistence.Context;
 using System.Globalization;
+using System.Linq.Expressions;
 
 namespace SecureWebshop.Persistence.Repositories
 {
@@ -33,6 +34,20 @@ namespace SecureWebshop.Persistence.Repositories
             using var session = _context.Store.OpenAsyncSession();
             var entity = await session.LoadAsync<T>(id);
             return entity;
+        }
+
+        public async Task<T> GetByCondition(Expression<Func<T, bool>> condition)
+        {
+            using var session = _context.Store.OpenAsyncSession();
+            var entity = await session.Query<T>().FirstOrDefaultAsync(condition, default);
+            return entity;
+        }
+
+        public async Task<Dictionary<string, T>> GetRange(List<string> idList)
+        {
+            using var session = _context.Store.OpenAsyncSession();
+            var entities = await session.LoadAsync<T>(idList);
+            return entities;
         }
 
         public async Task<IEnumerable<T>> GetAll(int pageSize, int pageNumber)

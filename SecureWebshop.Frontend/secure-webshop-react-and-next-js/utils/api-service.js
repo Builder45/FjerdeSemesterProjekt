@@ -32,13 +32,13 @@ export const removeUserAddress = async (title) => await api.delete('Users/Addres
 /* 
   Products
 */
+export const getProduct = async (id) => await api.get('Products/' + id);
+
 export const getProducts = async () => await api.get('Products');
 
 export const getProductsFull = async (token) => await api.get('Products/Full', { 
   headers: { 'Authorization': `Bearer ${token}` }
 });
-
-export const getProduct = async (id) => await api.get('Products/' + id);
 
 export const getProductsByQuery = async (params) => {
   let apiRoute = 'Products?';
@@ -55,6 +55,10 @@ export const updateProduct = async (product) => await api.put('Products', {
   ...product
 })
 
+export const createDummyProduct = async () => await api.post('Products/Dummy');
+
+export const toggleProduct = async (id) => await api.put('Products/' + id + '/Toggle');
+
 /* 
   Reviews
 */
@@ -64,6 +68,14 @@ export const updateProductReview = async (review, productId) => {
   );
 };
 
+/* 
+  Orders
+*/
+export const createOrder = async (order) => await api.post('Orders', {
+  ...order
+});
+
+export const confirmOrder = async (id) => await api.put('Orders/' + id);
 
 /* 
   Eksterne API-kald

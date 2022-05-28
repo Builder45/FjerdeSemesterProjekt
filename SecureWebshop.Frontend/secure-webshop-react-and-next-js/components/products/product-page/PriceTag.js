@@ -2,6 +2,7 @@ import classes from './PriceTag.module.css';
 
 export default function PriceTag ({ price, priceReduction }) {
 
+  price = Number(price);
   const actualPrice = price * (100 - priceReduction) / 100;
 
   if (priceReduction == 0) {

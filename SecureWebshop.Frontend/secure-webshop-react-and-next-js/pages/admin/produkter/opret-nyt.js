@@ -1,3 +1,4 @@
+import NewProduct from "../../../components/admin/products/NewProduct";
 import { createRequiredAuth } from "/utils/ssr";
 
 /* 
@@ -15,6 +16,6 @@ export async function getServerSideProps(context) {
 */
 export default function AdminNewProductPage() {
   return (
-    <p>Opret nyt produkt!</p>
+    <NewProduct />
   )
 }

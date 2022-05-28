@@ -8,7 +8,7 @@ import { validatePostalCode, validateText } from "../../utils/input-validation";
 import Button from "../ui/Button";
 import Card from "../ui/containers/Card";
 import Input from "../ui/forms/Input";
-import LinkText from "../ui/LinkText";
+import LinkText from "../ui/text/LinkText";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
 import classes from './Form.module.css';
@@ -99,7 +99,7 @@ export default function UserAddressForm({ addresses = [] }) {
           <Input disabled={true} id="city" type="text" label="By" value={city} />
         </div>
         <div className={classes.actions}>
-          <Button disabled={!isValid || !city} onClick={addAddressHandler}>Opdater oplysninger</Button>
+          <Button disabled={!isValid || !city} onClick={addAddressHandler}>Tilføj adresse</Button>
         </div>
         <LinkText href="/bruger" text="Gå tilbage"/>
       </form>

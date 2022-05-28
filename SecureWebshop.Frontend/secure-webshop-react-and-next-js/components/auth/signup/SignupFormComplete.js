@@ -1,4 +1,4 @@
-import LinkText from "../../ui/LinkText";
+import LinkText from "../../ui/text/LinkText";
 import SignupForm from "./SignupForm";
 
 export default function SignupFormComplete() {

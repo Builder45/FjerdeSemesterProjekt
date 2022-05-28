@@ -1,7 +1,7 @@
 import { signOut, useSession } from "next-auth/react";
 import { useEffect } from "react";
 import Card from "/components/ui/containers/Card";
-import LinkText from "/components/ui/LinkText";
+import LinkText from "/components/ui/text/LinkText";
 
 export default function SessionExpiredPage() {
   const { data: session } = useSession();

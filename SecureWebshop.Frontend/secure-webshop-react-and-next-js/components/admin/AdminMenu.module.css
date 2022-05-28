@@ -1,0 +1,11 @@
+.adminMenu {
+  width: 30%;
+}
+
+.adminMenu h2 {
+  margin-bottom: 2rem;
+}
+
+.adminMenu a {
+  display: block;
+}

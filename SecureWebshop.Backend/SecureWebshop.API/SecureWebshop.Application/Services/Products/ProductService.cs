@@ -30,6 +30,20 @@ namespace SecureWebshop.Application.Services.Products
             return new UpdateProductResponse { Success = true };
         }
 
+        public async Task<string> CreateDummyProductAsync()
+        {
+            var newProduct = new Product
+            {
+                Name = "Navn på produkt",
+                Description = "Dette er en midlertidig produktbeskrivelse",
+                Price = 0,
+                ImageUrl = "https://face-2-face.dk/wp-content/uploads/2022/01/placeholder-3.png"
+            };
+
+            await _genericProductRepo.CreateOrUpdate(newProduct);
+            return newProduct.Id;
+        }
+
         public async Task<ProductsResponse> GetProductsAsync(QueryRequest request, bool includeAll = false)
         {
             IEnumerable<Product> products;
@@ -104,14 +118,14 @@ namespace SecureWebshop.Application.Services.Products
             return new UpdateProductResponse { Success = true };
         }
 
-        public async Task<UpdateProductResponse> DeactivateProductAsync(string productId)
+        public async Task<UpdateProductResponse> ToggleProductAsync(string productId)
         {
             var product = await _genericProductRepo.Get(productId);
 
             if (product == null)
                 return new UpdateProductResponse { Success = false, Error = "Invalid product ID" };
 
-            product.Status = "Inaktiv";
+            product.Status = product.Status == "Aktiv" ? "Inaktiv" : "Aktiv";
 
             await _genericProductRepo.CreateOrUpdate(product);
             return new UpdateProductResponse { Success = true };

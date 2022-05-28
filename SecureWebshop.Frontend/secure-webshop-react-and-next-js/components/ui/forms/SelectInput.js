@@ -5,7 +5,7 @@ export default function SelectInput({ children, onChange, onBlur, label = "", id
   return (
     <div className={`${classes.control} ${error && classes.error}`}>
       <label htmlFor={id}>{label}</label>
-      <select disabled={disabled} onChange={onChange} onBlur={onBlur} id={id} value={value} >
+      <select disabled={disabled} onChange={onChange} onBlur={onBlur} id={id} value={value}>
         {children}
       </select>
       {error && <p>{error}</p>}

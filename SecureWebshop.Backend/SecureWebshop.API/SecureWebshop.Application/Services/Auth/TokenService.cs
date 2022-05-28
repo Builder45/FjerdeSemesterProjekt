@@ -8,12 +8,14 @@ namespace SecureWebshop.Application.Services.Auth
 {
     public class TokenService : ITokenService
     {
+        private readonly List<string> Admins;
         private readonly ITokenHelper _tokenHelper;
         private readonly IGenericRepo<User> _genericUserRepo;
         public TokenService(ITokenHelper tokenHelper, IGenericRepo<User> genericUserRepo)
         {
             _tokenHelper = tokenHelper;
             _genericUserRepo = genericUserRepo;
+            Admins = new List<string> { "56653127-f92d-43f5-a1eb-69ba8445956e" };
         }
 
         public async Task<Tuple<string, string>> GenerateTokensAsync(string userId)
@@ -23,7 +25,7 @@ namespace SecureWebshop.Application.Services.Auth
                 return null;
 
             // Midlertidig rollefordeling:
-            bool isAdmin = user.FirstName == "Admin";
+            bool isAdmin = Admins.Contains(userId);
 
             var accessToken = await _tokenHelper.GenerateAccessToken(userId, isAdmin);
             var refreshToken = await _tokenHelper.GenerateRefreshToken();

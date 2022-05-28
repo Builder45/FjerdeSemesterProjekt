@@ -1,7 +1,9 @@
 .link {
+  cursor: pointer;
   margin-top: 0.5rem;
   color: var(--color-text);
   text-decoration: underline;
+  font-size: var(--size-5);
 }
 
 .link:visited {

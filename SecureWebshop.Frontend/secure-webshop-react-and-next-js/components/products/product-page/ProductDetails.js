@@ -1,7 +1,7 @@
 import classes from './ProductDetails.module.css';
 import StarRating from '../../ui/rating/StarRating.js';
 import Button from '../../ui/Button';
-import LinkText from '../../ui/LinkText';
+import LinkText from '../../ui/text/LinkText';
 import { useDispatch } from 'react-redux';
 import { cartActions } from '../../../store';
 import PriceTag from './PriceTag';
@@ -13,7 +13,7 @@ export default function ProductDetails({ product = {} }) {
 
   const addItemHandler = item => {
     dispatch(cartActions.addItem({
-      id, name, price
+      id, name, price, priceReduction
     }));
   }
 

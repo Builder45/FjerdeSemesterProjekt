@@ -42,7 +42,7 @@ export default function MainNavbar({ onToggleCart }) {
         </a>
       </Link>
       <form className={classes.search} onSubmit={searchHandler}>
-        <input type="text" ref={searchRef}></input>
+        <input type="text" placeholder="Søg efter produkter" ref={searchRef}></input>
         <button>
           <Image src={SearchIcon} width={"20px"} height={"20px"}/>
         </button>

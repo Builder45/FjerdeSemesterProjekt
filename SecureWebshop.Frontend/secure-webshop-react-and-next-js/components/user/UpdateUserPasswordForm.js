@@ -11,7 +11,7 @@ import { useState } from "react";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import { validatePassword, validatePasswordMatch } from "../../utils/input-validation";
 import { useRouter } from "next/router";
-import LinkText from "../ui/LinkText";
+import LinkText from "../ui/text/LinkText";
 
 const ERROR_MESSAGE = "Fejl: Dit password blev ikke opdateret!";
 const SUCCESS_MESSAGE = "Succes! Dit password er blevet ændret!";

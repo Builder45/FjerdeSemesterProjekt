@@ -1,3 +1,4 @@
+import AdminMenu from "../../components/admin/AdminMenu";
 import { createRequiredAuth } from "/utils/ssr";
 
 /* 
@@ -15,6 +16,6 @@ export async function getServerSideProps(context) {
 */
 export default function AdminIndexPage() {
   return (
-    <p>Secret admin page!</p>
+    <AdminMenu />
   )
 }

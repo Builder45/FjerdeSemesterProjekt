@@ -5,7 +5,7 @@ export default function CartItem({ item, onAdd, onRemove, onCartToggle }) {
 
   const router = useRouter();
   const { name, quantity } = item;
-  const total = `${item.total.toFixed(2)} kr`;
+  const total = `${item.total.toFixed(2).replace('.', ',')} kr`;
 
   const itemRedirectHandler = () => {
     router.push('/produkt/' + item.id);

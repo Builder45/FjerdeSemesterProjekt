@@ -37,8 +37,8 @@ namespace SecureWebshop.API.Controllers
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
-        // GET => URL/api/Products?pageSize=10&pageNumber=1&search=searchTerm
-        [AllowAnonymous]
+        // GET => URL/api/Products/Full
+        [Authorize(Roles = "Admin")]
         [HttpGet("Full")]
         public async Task<IActionResult> GetProductsFull([FromQuery] QueryRequest request)
         {
@@ -57,12 +57,32 @@ namespace SecureWebshop.API.Controllers
             return response.Success ? Ok(response) : BadRequest(response);
         }
 
+        // POST => URL/api/Products/Dummy
+        [Authorize(Roles = "Admin")]
+        [HttpPost("Dummy")]
+        public async Task<IActionResult> CreateDummyProduct()
+        {
+            var response = await _productService.CreateDummyProductAsync();
+
+            return response != "" ? Ok(response) : BadRequest("Error");
+        }
+
         // PUT => URL/api/Products
         [Authorize(Roles = "Admin")]
         [HttpPut()]
         public async Task<IActionResult> UpdateProduct(UpdateProductRequest request)
         {
             var response = await _productService.UpdateProductAsync(request);
+
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+
+        // PUT => URL/api/Products/{productId}/Toggle
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{productId}/Toggle")]
+        public async Task<IActionResult> UpdateProductStatus([FromRoute] string productId)
+        {
+            var response = await _productService.ToggleProductAsync(productId);
 
             return response.Success ? Ok(response) : BadRequest(response);
         }
