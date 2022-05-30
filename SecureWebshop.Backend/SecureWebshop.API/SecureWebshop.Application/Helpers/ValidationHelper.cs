@@ -2,46 +2,41 @@
 {
     public class ValidationHelper
     {
-        public static bool EmailIsValid(string email) => email.Contains('@');
+        public static bool EmailIsValid(string email)
+        {
+            if (!email.Contains('@'))
+                return false;
+
+            var emailPortions = email.Split('@');
+            if (emailPortions.Length != 2)
+                return false;
+
+            if (emailPortions[0].Length == 0 || emailPortions[1].Length == 0)
+                return false;
+
+            return true;
+        }
 
         public static bool PasswordIsValid(string password)
         {
-            if (password.Length < 8)
-                return false;
-
             Dictionary<string, int> charCounter = new Dictionary<string, int>()
             {
-                { "lower", 0 },
-                { "upper", 0 },
-                { "digit", 0 },
-                { "special", 0 }
+                { "lower", 0 }, { "upper", 0 }, { "digit", 0 }, { "special", 0 }
             };
 
             foreach (char c in password)
             {
                 if (Char.IsUpper(c))
-                    charCounter["upper"]++;
+                    charCounter["upper"] = 1;
                 else if (Char.IsLetter(c))
-                    charCounter["lower"]++;
+                    charCounter["lower"] = 1;
                 else if (Char.IsDigit(c))
-                    charCounter["digit"]++;
+                    charCounter["digit"] = 1;
                 else
-                    charCounter["special"]++;
+                    charCounter["special"] = 1;
             }
 
-            Console.WriteLine(charCounter);
-
-            int passwordStrength = 0;
-
-            if (charCounter["upper"] > 0)
-                passwordStrength++;
-            if (charCounter["lower"] > 0)
-                passwordStrength++;
-            if (charCounter["digit"] > 0)
-                passwordStrength++;
-            if (charCounter["special"] > 0)
-                passwordStrength++;
-
+            int passwordStrength = charCounter["upper"] + charCounter["lower"] + charCounter["digit"] + charCounter["special"];
             return passwordStrength >= 3;
         }
     }

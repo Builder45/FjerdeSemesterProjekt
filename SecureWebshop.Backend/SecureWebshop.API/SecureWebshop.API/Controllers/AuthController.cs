@@ -24,69 +24,40 @@ namespace SecureWebshop.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("Login")]
-        public async Task<IActionResult> Login(LoginRequest loginRequest)
+        public async Task<IActionResult> Login(LoginRequest request)
         {
-            if (loginRequest == null)
-            {
-                return BadRequest(new TokenResponse
-                {
-                    Error = "Missing login details"
-                });
-            }
+            if (request == null)
+                return BadRequest(new TokenResponse { Error = "Missing login details" });
 
-            var loginResponse = await _authService.LoginAsync(loginRequest);
+            var response = await _authService.LoginAsync(request);
 
-            if (!loginResponse.Success)
-            {
-                return Unauthorized(new
-                {
-                    loginResponse.Error
-                });
-            }
-
-            return Ok(loginResponse);
+            return response.Success ? Ok(response) : Unauthorized(new { response.Error });
         }
 
         [AllowAnonymous]
         [HttpPost("RefreshToken")]
-        public async Task<IActionResult> RefreshToken(RefreshTokenRequest refreshTokenRequest)
+        public async Task<IActionResult> RefreshToken(RefreshTokenRequest request)
         {
-            if (refreshTokenRequest == null)
-            {
-                return BadRequest(new TokenResponse
-                {
-                    Error = "Missing refresh token details"
-                });
-            }
+            if (request == null)
+                return BadRequest(new TokenResponse { Error = "Missing refresh token details" });
 
-            var validateRefreshTokenResponse = await _tokenService.ValidateRefreshTokenAsync(refreshTokenRequest);
-
+            var validateRefreshTokenResponse = await _tokenService.ValidateRefreshTokenAsync(request);
             if (!validateRefreshTokenResponse.Success)
-            {
-                return UnprocessableEntity(validateRefreshTokenResponse);
-            }
+                return Unauthorized(validateRefreshTokenResponse);
 
             var newTokens = await _tokenService.GenerateTokensAsync(validateRefreshTokenResponse.UserId);
-
-            var tokenResponse = new TokenResponse
-            {
-                AccessToken = newTokens.Item1,
-                RefreshToken = newTokens.Item2
-            };
+            var tokenResponse = new TokenResponse { AccessToken = newTokens.Item1, RefreshToken = newTokens.Item2 };
 
             return Ok(tokenResponse);
         }
 
         [AllowAnonymous]
         [HttpPost("Signup")]
-        public async Task<IActionResult> Signup(SignupRequest signupRequest)
+        public async Task<IActionResult> Signup(SignupRequest request)
         {
-            var signupResponse = await _authService.SignupAsync(signupRequest);
+            var response = await _authService.SignupAsync(request);
 
-            if (!signupResponse.Success)
-                return UnprocessableEntity(signupResponse);
-
-            return Ok(signupResponse.Email);
+            return response.Success ? Ok(response.Email) : BadRequest(response);
         }
 
         [AllowAnonymous]
@@ -102,12 +73,9 @@ namespace SecureWebshop.API.Controllers
         [HttpPost("Logout")]
         public async Task<IActionResult> Logout()
         {
-            var logoutResponse = await _authService.LogoutAsync(UserId);
+            var response = await _authService.LogoutAsync(UserId);
 
-            if (!logoutResponse.Success)
-                return UnprocessableEntity(logoutResponse);
-
-            return Ok();
+            return response.Success ? Ok() : BadRequest(response);
         }
     }
 }

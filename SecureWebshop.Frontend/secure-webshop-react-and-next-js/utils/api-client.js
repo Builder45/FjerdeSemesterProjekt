@@ -21,7 +21,7 @@ const ApiClient = () => {
     },
     (error) => {
       if (error.response.status === 429) {
-        document.location.href = '/server-fejl';
+        document.location.href = '/for-mange-requests';
       }
     },
   );

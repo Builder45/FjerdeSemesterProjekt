@@ -76,7 +76,7 @@ builder.Services.Configure<IpRateLimitOptions>(options =>
     options.StackBlockedRequests = true;
     options.HttpStatusCode = 429;
     options.RealIpHeader = "X-Real-IP";
-    options.ClientIdHeader = "X-ClinetId";
+    options.ClientIdHeader = "X-ClientId";
     options.GeneralRules = new List<RateLimitRule>
     {
         new RateLimitRule
