@@ -94,19 +94,15 @@ const callbacks = {
       console.log(token.refreshToken);
     }
 
-    console.log("jwt callback", token.accessToken.slice(-10));
-
     const currentTime = Date.now();
     if (!token.accessToken || currentTime < (token.accessTokenExpires * 1000)) {
       return Promise.resolve(token);
     }
 
     token.accessTokenExpires = null;
-    console.log("jwt needs refreshing", token.accessToken.slice(-10));
 
     // Skaf ny token, hvis den gamle er udløbet:
     token = await refreshAccessToken(token);
-    console.log("jwt refreshed", token.accessToken.slice(-10));
     return Promise.resolve(token);
   },
   session: async ({ session, token }) => {
